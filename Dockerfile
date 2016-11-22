@@ -1,7 +1,5 @@
 FROM alpine:3.4
 
-ADD http://get.bitlbee.org/src/bitlbee-3.4.2.tar.gz /tmp/
-
 RUN apk add --no-cache --update libpurple \
 	libpurple-xmpp \
 	libpurple-oscar \
@@ -22,8 +20,9 @@ RUN apk add --no-cache --update libpurple \
 	openssl-dev \
 	pidgin-dev \
     && cd /tmp \
-    && tar xf bitlbee-3.4.2.tar.gz \
-    && cd bitlbee-3.4.2 \
+    && git clone https://github.com/bitlbee/bitlbee.git \
+    && cd bitlbee \
+    && git checkout 3.4.2 \
     && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl --purple=1 --ssl=openssl --prefix=/usr --etcdir=/etc/bitlbee \
     && make \
     && make install \
@@ -38,7 +37,7 @@ RUN apk add --no-cache --update libpurple \
     && cd /tmp \
     && git clone https://github.com/jgeboski/bitlbee-steam.git \
     && cd bitlbee-steam \
-    && ./autogen.sh \
+    && ./autogen.sh --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
     && make \
     && make install \
     && strip /usr/lib/bitlbee/steam.so \
