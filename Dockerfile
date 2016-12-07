@@ -1,5 +1,7 @@
 FROM alpine:3.4
 
+ENV BITLBEE_VERSION 3.4.2
+
 RUN apk add --no-cache --update libpurple \
 	libpurple-xmpp \
 	libpurple-oscar \
@@ -22,7 +24,7 @@ RUN apk add --no-cache --update libpurple \
     && cd /tmp \
     && git clone https://github.com/bitlbee/bitlbee.git \
     && cd bitlbee \
-    && git checkout 3.4.2 \
+    && git checkout ${BITLBEE_VERSION} \
     && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl --purple=1 --ssl=openssl --prefix=/usr --etcdir=/etc/bitlbee \
     && make \
     && make install \
