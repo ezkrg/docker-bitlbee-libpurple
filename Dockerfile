@@ -9,6 +9,8 @@ RUN apk add --no-cache --update libpurple \
 	libpurple-bonjour \
 	json-glib \
 	libgcrypt \
+	libssl1.0 \
+	libcrypto1.0 \
     && apk add --no-cache --update --virtual .build-dependencies \
 	git \
 	make \
