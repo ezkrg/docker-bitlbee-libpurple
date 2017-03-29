@@ -1,6 +1,6 @@
-FROM alpine:3.4
+FROM alpine:3.5
 
-ENV BITLBEE_VERSION 3.4.2
+ENV BITLBEE_VERSION 3.5.1
 
 RUN apk add --no-cache --update libpurple \
 	libpurple-xmpp \
