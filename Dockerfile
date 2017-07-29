@@ -1,16 +1,17 @@
-FROM alpine:3.5
+FROM alpine:3.6
 
 ENV BITLBEE_VERSION 3.5.1
 
 RUN apk add --no-cache --update libpurple \
 	libpurple-xmpp \
 	libpurple-oscar \
-	libpurple-ymsg \
 	libpurple-bonjour \
 	json-glib \
 	libgcrypt \
 	libssl1.0 \
 	libcrypto1.0 \
+	gettext \
+	libwebp \
     && apk add --no-cache --update --virtual .build-dependencies \
 	git \
 	make \
@@ -23,6 +24,7 @@ RUN apk add --no-cache --update libpurple \
 	libgcrypt-dev \
 	openssl-dev \
 	pidgin-dev \
+	libwebp-dev \
     && cd /tmp \
     && git clone https://github.com/bitlbee/bitlbee.git \
     && cd bitlbee \
@@ -51,6 +53,13 @@ RUN apk add --no-cache --update libpurple \
     && make \
     && make install \
     && strip /usr/lib/purple-2/libskypeweb.so \
+    && cd /tmp \
+    && git clone --recursive https://github.com/majn/telegram-purple \
+    && cd telegram-purple \
+    && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
+    && make \
+    && make install \
+    && strip /usr/lib/purple-2/telegram-purple.so \
     && rm -rf /tmp/* \
     && rm -rf /usr/include/bitlbee \
     && rm -f /usr/lib/pkgconfig/bitlbee.pc \
