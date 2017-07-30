@@ -1,5 +1,8 @@
 # docker-bitlbee-libpurple
 
+## 2017-07-30 20:52:55
+- adding purple-hangouts
+
 ## 2017-07-29 18:14:51
 - using alpine 3.6
 - remove libpurple-ymsg

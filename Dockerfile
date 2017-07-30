@@ -12,6 +12,8 @@ RUN apk add --no-cache --update libpurple \
 	libcrypto1.0 \
 	gettext \
 	libwebp \
+	glib \
+	protobuf-c \
     && apk add --no-cache --update --virtual .build-dependencies \
 	git \
 	make \
@@ -25,6 +27,9 @@ RUN apk add --no-cache --update libpurple \
 	openssl-dev \
 	pidgin-dev \
 	libwebp-dev \
+	glib-dev \
+	protobuf-c-dev \
+	mercurial \
     && cd /tmp \
     && git clone https://github.com/bitlbee/bitlbee.git \
     && cd bitlbee \
@@ -60,6 +65,12 @@ RUN apk add --no-cache --update libpurple \
     && make \
     && make install \
     && strip /usr/lib/purple-2/telegram-purple.so \
+    && cd /tmp \
+    && hg clone https://bitbucket.org/EionRobb/purple-hangouts \
+    && cd purple-hangouts \
+    && make \
+    && make install \
+    && strip /usr/lib/purple-2/libhangouts.so \
     && rm -rf /tmp/* \
     && rm -rf /usr/include/bitlbee \
     && rm -f /usr/lib/pkgconfig/bitlbee.pc \
