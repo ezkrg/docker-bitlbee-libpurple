@@ -1,5 +1,8 @@
 # docker-bitlbee-libpurple
 
+## 2017-09-18 12:3045
+- trigger rebuild related to https://github.com/bitlbee/bitlbee-facebook/issues/151
+
 ## 2017-07-30 20:52:55
 - adding purple-hangouts
 
