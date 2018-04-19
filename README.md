@@ -57,4 +57,3 @@ By default, none of the channels you normally reside in will be joined. To join 
 Don't add the leading #. Adding private channels works the same way as public channels, both without the leading #.
 Now, join the channel with /join #channnelname and you'll be good to go.
 
-will add channel general,
