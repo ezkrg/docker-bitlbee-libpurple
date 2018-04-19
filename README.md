@@ -14,11 +14,12 @@ docker build -t bitlbee:latest .
 
 Then run it:
 ```bash
-docker run -p 6667:6667 --name bitlbee -v /local/path/to/configurations:/var/lib/bitlbee --restart=always --detach bitlbee:latest
+docker run -p 6667:6667 --name bitlbee -v /local/path/to/configurations:/var/lib/bitlbee \
+   --restart=always --detach bitlbee:latest
 ```
 
 The local path to the configurations will contain the configuration as saved by 
-bitlbee. It is advisable to do so, as you're configuration will be gone when
+bitlbee. It is advisable to do so, as your configuration will be gone when
 the docker image gets deleted.
 
 ## Setting up a Slack account
