@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.7
 
 ENV BITLBEE_VERSION 3.5.1
 
@@ -71,6 +71,12 @@ RUN apk add --no-cache --update libpurple \
     && make \
     && make install \
     && strip /usr/lib/purple-2/libhangouts.so \
+    && cd /tmp \
+    && git clone https://github.com/dylex/slack-libpurple.git \
+    && cd slack-libpurple \
+    && make \
+    && make install \
+    && strip /usr/lib/purple-2/libslack.so \
     && rm -rf /tmp/* \
     && rm -rf /usr/include/bitlbee \
     && rm -f /usr/lib/pkgconfig/bitlbee.pc \

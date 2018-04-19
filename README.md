@@ -1,6 +1,10 @@
 # docker-bitlbee-libpurple
 
-## 2017-09-18 12:3045
+## 2018-04-19 14:17:23
+- use alpine 3.7
+- add slack-libpurple
+
+## 2017-09-18 12:30:45
 - trigger rebuild related to https://github.com/bitlbee/bitlbee-facebook/issues/151
 
 ## 2017-07-30 20:52:55
