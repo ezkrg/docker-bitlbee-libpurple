@@ -30,6 +30,7 @@ RUN apk add --no-cache --update libpurple \
 	glib-dev \
 	protobuf-c-dev \
 	mercurial \
+	libxml2-dev \
     && cd /tmp \
     && git clone https://github.com/bitlbee/bitlbee.git \
     && cd bitlbee \
@@ -77,6 +78,14 @@ RUN apk add --no-cache --update libpurple \
     && make \
     && make install \
     && strip /usr/lib/purple-2/libslack.so \
+    && cd /tmp \
+    && git clone https://github.com/tieto/sipe.git \
+    && cd sipe \
+    && ./autogen.sh \
+    && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl --prefix=/usr \
+    && make \
+    && make install \
+    && strip /usr/lib/purple-2/libsipe.so \
     && rm -rf /tmp/* \
     && rm -rf /usr/include/bitlbee \
     && rm -f /usr/lib/pkgconfig/bitlbee.pc \
