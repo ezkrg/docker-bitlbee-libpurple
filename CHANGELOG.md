@@ -1,5 +1,8 @@
 # Changelog
 
+## 2018-08-17 17:59:13 (Waester)
+- add libsipe support
+
 ## 2018-04-19 23:01:49 (friek)
 - updated README
 - moved changelog to CHANGELOG.md
