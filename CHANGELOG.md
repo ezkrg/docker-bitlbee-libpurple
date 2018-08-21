@@ -1,5 +1,9 @@
 # Changelog
 
+## 2018-08-21 10:59:17 (needo37)
+- add discord plugin
+- run as bitlbee user
+
 ## 2018-08-17 17:59:13 (Waester)
 - add libsipe support
 
