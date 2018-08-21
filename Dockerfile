@@ -2,8 +2,8 @@ FROM alpine:3.7
 
 ENV BITLBEE_VERSION 3.5.1
 
-RUN addgroup -g 100 -S bitlbee \
- && adduser -u 100 -D -S -G bitlbee bitlbee \
+RUN addgroup -g 101 -S bitlbee \
+ && adduser -u 101 -D -S -G bitlbee bitlbee \
  && apk add --no-cache --update libpurple \
 	libpurple-xmpp \
 	libpurple-oscar \
@@ -16,7 +16,7 @@ RUN addgroup -g 100 -S bitlbee \
 	libwebp \
 	glib \
 	protobuf-c \
-    && apk add --no-cache --update --virtual .build-dependencies \
+ && apk add --no-cache --update --virtual .build-dependencies \
 	git \
 	make \
 	autoconf \
