@@ -86,6 +86,14 @@ RUN apk add --no-cache --update libpurple \
     && make \
     && make install \
     && strip /usr/lib/purple-2/libsipe.so \
+    && cd /tmp \
+    && git clone https://github.com/sm00th/bitlbee-discord.git \
+    && cd bitlbee-discord \
+    && ./autogen.sh \
+    && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl --prefix=/usr \
+    && make \
+    && make install \
+    && strip /usr/lib/bitlbee/discord.so \    
     && rm -rf /tmp/* \
     && rm -rf /usr/include/bitlbee \
     && rm -f /usr/lib/pkgconfig/bitlbee.pc \
@@ -93,4 +101,7 @@ RUN apk add --no-cache --update libpurple \
 
 EXPOSE 6667
 
+RUN addgroup -g 996 -S bitlbee
+RUN adduser -u 996 -D -S -G bitlbee bitlbee
+USER bitlbee
 ENTRYPOINT [ "/usr/sbin/bitlbee", "-F", "-n" ]
