@@ -4,7 +4,8 @@ ENV BITLBEE_VERSION 3.5.1
 
 RUN addgroup -g 101 -S bitlbee \
  && adduser -u 101 -D -S -G bitlbee bitlbee \
- && apk add --no-cache --update libpurple \
+ && apk add --no-cache --update tzdata \
+ 	libpurple \
 	libpurple-xmpp \
 	libpurple-oscar \
 	libpurple-bonjour \
