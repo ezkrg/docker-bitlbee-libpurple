@@ -101,4 +101,7 @@ RUN apk add --no-cache --update libpurple \
 
 EXPOSE 6667
 
+RUN addgroup -g 996 -S bitlbee
+RUN adduser -u 996 -D -S -G bitlbee bitlbee
+USER bitlbee
 ENTRYPOINT [ "/usr/sbin/bitlbee", "-F", "-n" ]
