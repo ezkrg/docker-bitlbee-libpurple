@@ -1,5 +1,9 @@
 # Changelog
 
+## 2018-09-10 08:52:53
+- add rocket.chat plugin
+- use alpine 3.8
+
 ## 2018-08-21 10:59:17 (needo37)
 - add discord plugin
 - run as bitlbee user

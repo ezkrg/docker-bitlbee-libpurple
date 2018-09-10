@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.8
 
 ENV BITLBEE_VERSION 3.5.1
 
@@ -17,6 +17,7 @@ RUN addgroup -g 101 -S bitlbee \
 	libwebp \
 	glib \
 	protobuf-c \
+	discount-libs \
  && apk add --no-cache --update --virtual .build-dependencies \
 	git \
 	make \
@@ -34,6 +35,7 @@ RUN addgroup -g 101 -S bitlbee \
 	protobuf-c-dev \
 	mercurial \
 	libxml2-dev \
+	discount-dev \
  && cd /tmp \
  && git clone https://github.com/bitlbee/bitlbee.git \
  && cd bitlbee \
@@ -96,7 +98,13 @@ RUN addgroup -g 101 -S bitlbee \
  && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl --prefix=/usr \
  && make \
  && make install \
- && strip /usr/lib/bitlbee/discord.so \    
+ && strip /usr/lib/bitlbee/discord.so \
+ && cd /tmp \
+ && hg clone https://bitbucket.org/EionRobb/purple-rocketchat \
+ && cd purple-rocketchat \
+ && make \
+ && make install \
+ && strip /usr/lib/purple-2/librocketchat.so \
  && rm -rf /tmp/* \
  && rm -rf /usr/include/bitlbee \
  && rm -f /usr/lib/pkgconfig/bitlbee.pc \
