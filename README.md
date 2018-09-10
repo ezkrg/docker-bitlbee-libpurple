@@ -1,14 +1,15 @@
 # docker-bitlbee-libpurple
 
 This docker image includes bitlbee with a bunch of useful plugins:
-  - facebook
-  - steam
-  - skypeweb
-  - telegram
-  - hangouts
-  - slack
-  - sipe
-  - discord
+  - [facebook](https://github.com/jgeboski/bitlbee-facebook)
+  - [steam](https://github.com/jgeboski/bitlbee-steam)
+  - [skypeweb](https://github.com/EionRobb/skype4pidgin)
+  - [telegram](https://github.com/majn/telegram-purple)
+  - [hangouts](https://bitbucket.org/EionRobb/purple-hangouts)
+  - [slack](https://github.com/dylex/slack-libpurple)
+  - [sipe](https://github.com/tieto/sipe)
+  - [discord](https://github.com/sm00th/bitlbee-discord)
+  - [rocket.chat](https://bitbucket.org/EionRobb/purple-rocketchat)
 
 The most significant being the [libpurple Slack plugin](https://github.com/dylex/slack-libpurple). As Slack is turning off its IRC gateway on May 15 2018, now is the time to spin up your own docker image and start using bitlbee instead.
 
