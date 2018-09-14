@@ -1,6 +1,7 @@
 FROM alpine:3.8
 
 ENV BITLBEE_VERSION 3.5.1
+ENV SIPE_VERSION upstream/1.23.3
 
 RUN addgroup -g 101 -S bitlbee \
  && adduser -u 101 -D -S -G bitlbee bitlbee \
@@ -86,6 +87,7 @@ RUN addgroup -g 101 -S bitlbee \
  && cd /tmp \
  && git clone https://github.com/tieto/sipe.git \
  && cd sipe \
+ && git checkout ${SIPE_VERSION} \
  && ./autogen.sh \
  && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl --prefix=/usr \
  && make \
