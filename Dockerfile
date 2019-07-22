@@ -19,6 +19,7 @@ RUN addgroup -g 101 -S bitlbee \
 	glib \
 	protobuf-c \
 	discount-libs \
+	bash \
  && apk add --no-cache --update --virtual .build-dependencies \
 	git \
 	make \
