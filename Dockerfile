@@ -1,6 +1,6 @@
-FROM alpine:3.8
+FROM alpine:3.10
 
-ENV BITLBEE_VERSION 3.5.1
+ENV BITLBEE_VERSION 3.6
 ENV SIPE_VERSION upstream/1.23.3
 ENV ROCKETCHAT_VERSION 826990b
 
@@ -13,13 +13,14 @@ RUN addgroup -g 101 -S bitlbee \
 	libpurple-bonjour \
 	json-glib \
 	libgcrypt \
-	libssl1.0 \
-	libcrypto1.0 \
+	libssl1.1 \
+	libcrypto1.1 \
 	gettext \
 	libwebp \
 	glib \
 	protobuf-c \
 	discount-libs \
+	libpng \
 	bash \
  && apk add --no-cache --update --virtual .build-dependencies \
 	git \
@@ -39,6 +40,7 @@ RUN addgroup -g 101 -S bitlbee \
 	mercurial \
 	libxml2-dev \
 	discount-dev \
+	libpng-dev \
  && cd /tmp \
  && git clone https://github.com/bitlbee/bitlbee.git \
  && cd bitlbee \
