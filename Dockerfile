@@ -2,6 +2,7 @@ FROM alpine:3.8
 
 ENV BITLBEE_VERSION 3.5.1
 ENV SIPE_VERSION upstream/1.23.3
+ENV ROCKETCHAT_VERSION 826990b
 
 RUN addgroup -g 101 -S bitlbee \
  && adduser -u 101 -D -S -G bitlbee bitlbee \
@@ -103,7 +104,7 @@ RUN addgroup -g 101 -S bitlbee \
  && make install \
  && strip /usr/lib/bitlbee/discord.so \
  && cd /tmp \
- && hg clone https://bitbucket.org/EionRobb/purple-rocketchat \
+ && hg clone https://bitbucket.org/EionRobb/purple-rocketchat -r ${ROCKETCHAT_VERSION} \
  && cd purple-rocketchat \
  && make \
  && make install \
