@@ -1,7 +1,14 @@
 FROM alpine:3.10
 
 ENV BITLBEE_VERSION 3.6
+ENV FACEBOOK_VERSION v1.2.0
+ENV STEAM_VERSION a6444d2
+ENV SKYPEWEB_VERSION 5d29285
+ENV TELEGRAM_VERSION b101bbb
+ENV HANGOUTS_VERSION 3f7d89b
+ENV SLACK_VERSION 8acc4eb
 ENV SIPE_VERSION upstream/1.23.3
+ENV DISCORD_VERSION aa0bbf2
 ENV ROCKETCHAT_VERSION 826990b
 
 RUN addgroup -g 101 -S bitlbee \
@@ -50,15 +57,17 @@ RUN addgroup -g 101 -S bitlbee \
  && make install \
  && make install-dev \
  && cd /tmp \
- && git clone https://github.com/jgeboski/bitlbee-facebook.git \
+ && git clone https://github.com/bitlbee/bitlbee-facebook.git \
  && cd bitlbee-facebook \
+ && git checkout ${FACEBOOK_VERSION} \
  && ./autogen.sh \
  && make \
  && make install \
  && strip /usr/lib/bitlbee/facebook.so \
  && cd /tmp \
- && git clone https://github.com/jgeboski/bitlbee-steam.git \
+ && git clone https://github.com/bitlbee/bitlbee-steam.git \
  && cd bitlbee-steam \
+ && git checkout ${STEAM_VERSION} \
  && ./autogen.sh --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
  && make \
  && make install \
@@ -66,18 +75,20 @@ RUN addgroup -g 101 -S bitlbee \
  && cd /tmp \
  && git clone git://github.com/EionRobb/skype4pidgin.git \
  && cd skype4pidgin/skypeweb \
+ && git checkout ${SKYPEWEB_VERSION} \
  && make \
  && make install \
  && strip /usr/lib/purple-2/libskypeweb.so \
  && cd /tmp \
  && git clone --recursive https://github.com/majn/telegram-purple \
  && cd telegram-purple \
+ && git checkout ${TELEGRAM_VERSION} \
  && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
  && make \
  && make install \
  && strip /usr/lib/purple-2/telegram-purple.so \
  && cd /tmp \
- && hg clone https://bitbucket.org/EionRobb/purple-hangouts \
+ && hg clone https://bitbucket.org/EionRobb/purple-hangouts -r ${HANGOUTS_VERSION} \
  && cd purple-hangouts \
  && make \
  && make install \
@@ -85,6 +96,7 @@ RUN addgroup -g 101 -S bitlbee \
  && cd /tmp \
  && git clone https://github.com/dylex/slack-libpurple.git \
  && cd slack-libpurple \
+ && git checkout ${SLACK_VERSION} \
  && make \
  && make install \
  && strip /usr/lib/purple-2/libslack.so \
@@ -100,6 +112,7 @@ RUN addgroup -g 101 -S bitlbee \
  && cd /tmp \
  && git clone https://github.com/sm00th/bitlbee-discord.git \
  && cd bitlbee-discord \
+ && git checkout ${DISCORD_VERSION} \
  && ./autogen.sh \
  && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl --prefix=/usr \
  && make \
