@@ -1,5 +1,8 @@
 # Changelog
 
+## 2019-09-12 08:52:53
+- adding mastodon
+
 ## 2018-09-10 08:52:53
 - add rocket.chat plugin
 - use alpine 3.8
