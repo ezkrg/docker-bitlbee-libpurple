@@ -10,6 +10,7 @@ ARG SIPE=1
 ARG DISCORD=1
 ARG ROCKETCHAT=1
 ARG MASTODON=1
+ARG MATRIX=1
 
 ENV BITLBEE_VERSION 3.6
 ENV FACEBOOK_VERSION v1.2.0
@@ -22,6 +23,8 @@ ENV SIPE_VERSION upstream/1.23.3
 ENV DISCORD_VERSION aa0bbf2
 ENV ROCKETCHAT_VERSION 826990b
 ENV MASTODON_VERSION 83dee0b
+ENV OLM_VERSION 3.1.4
+ENV MATRIX_VERSION 4494ba2
 
 RUN addgroup -g 101 -S bitlbee \
  && adduser -u 101 -D -S -G bitlbee bitlbee \
@@ -40,6 +43,8 @@ RUN addgroup -g 101 -S bitlbee \
 	protobuf-c \
 	discount-libs \
 	libpng \
+	sqlite \
+	http-parser \
 	bash \
  && apk add --no-cache --update --virtual .build-dependencies \
 	git \
@@ -60,6 +65,8 @@ RUN addgroup -g 101 -S bitlbee \
 	libxml2-dev \
 	discount-dev \
 	libpng-dev \
+	sqlite-dev \
+	http-parser-dev \
  && cd /tmp \
  && git clone https://github.com/bitlbee/bitlbee.git \
  && cd bitlbee \
@@ -145,6 +152,19 @@ RUN addgroup -g 101 -S bitlbee \
  && make \
  && make install \
  && strip /usr/lib/bitlbee/mastodon.so; fi \
+ && if [ ${MATRIX} -eq 1 ]; then cd /tmp \
+ && git clone -n https://gitlab.matrix.org/matrix-org/olm.git \
+ && cd olm \
+ && git checkout ${OLM_VERSION} \
+ && make \
+ && make install \
+ && cd /tmp \
+ && git clone -n https://github.com/matrix-org/purple-matrix \
+ && cd purple-matrix \
+ && git checkout ${MATRIX_VERSION} \
+ && make \
+ && make install \
+ && strip /usr/lib/purple-2/libmatrix.so; fi \
  && rm -rf /tmp/* \
  && rm -rf /usr/include/bitlbee \
  && rm -f /usr/lib/pkgconfig/bitlbee.pc \
