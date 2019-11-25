@@ -1,5 +1,8 @@
 # Changelog
 
+## 2019-11-25 18:13:41 ([revmischa](https://github.com/revmischa))
+- add matrix
+
 ## 2019-11-25 13:39:21 ([revmischa](https://github.com/revmischa))
 - add mastodon
 
