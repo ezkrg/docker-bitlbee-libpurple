@@ -75,6 +75,7 @@ RUN addgroup -g 101 -S bitlbee \
  && make \
  && make install \
  && make install-dev \
+ && strip /usr/sbin/bitlbee \
  && if [ ${FACEBOOK} -eq 1 ]; then cd /tmp \
  && git clone https://github.com/bitlbee/bitlbee-facebook.git \
  && cd bitlbee-facebook \
@@ -158,6 +159,7 @@ RUN addgroup -g 101 -S bitlbee \
  && git checkout ${OLM_VERSION} \
  && make \
  && make install \
+ && strip /usr/local/lib/libolm.so.${OLM_VERSION} \
  && cd /tmp \
  && git clone -n https://github.com/matrix-org/purple-matrix \
  && cd purple-matrix \
