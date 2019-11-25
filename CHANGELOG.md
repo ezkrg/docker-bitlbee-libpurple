@@ -1,20 +1,20 @@
 # Changelog
 
-## 2019-11-25 13:39:21
-- add mastodon (revmischa)
+## 2019-11-25 13:39:21 ([revmischa](https://github.com/revmischa))
+- add mastodon
 
 ## 2018-09-10 08:52:53
 - add rocket.chat plugin
 - use alpine 3.8
 
-## 2018-08-21 10:59:17 (needo37)
+## 2018-08-21 10:59:17 ([needo37](https://github.com/needo37))
 - add discord plugin
 - run as bitlbee user
 
-## 2018-08-17 17:59:13 (Waester)
+## 2018-08-17 17:59:13 ([Waester](https://github.com/Waester))
 - add libsipe support
 
-## 2018-04-19 23:01:49 (friek)
+## 2018-04-19 23:01:49 ([friek](https://github.com/friek))
 - updated README
 - moved changelog to CHANGELOG.md
 
@@ -41,4 +41,3 @@
 
 ## 2017-03-30 11:43:46
 - trigger rebuild cause of facebook fix
-
