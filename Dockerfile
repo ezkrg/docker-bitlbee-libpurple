@@ -143,7 +143,8 @@ RUN addgroup -g 101 -S bitlbee \
  && ./autogen.sh \
  && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
  && make \
- && make install; fi \
+ && make install \
+ && strip /usr/lib/bitlbee/mastodon.so; fi \
  && rm -rf /tmp/* \
  && rm -rf /usr/include/bitlbee \
  && rm -f /usr/lib/pkgconfig/bitlbee.pc \
