@@ -9,6 +9,7 @@ ARG SLACK=1
 ARG SIPE=1
 ARG DISCORD=1
 ARG ROCKETCHAT=1
+ARG MASTODON=1
 
 ENV BITLBEE_VERSION 3.6
 ENV FACEBOOK_VERSION v1.2.0
@@ -20,6 +21,7 @@ ENV SLACK_VERSION 8acc4eb
 ENV SIPE_VERSION upstream/1.23.3
 ENV DISCORD_VERSION aa0bbf2
 ENV ROCKETCHAT_VERSION 826990b
+ENV MASTODON_VERSION 83dee0b
 
 RUN addgroup -g 101 -S bitlbee \
  && adduser -u 101 -D -S -G bitlbee bitlbee \
@@ -134,6 +136,14 @@ RUN addgroup -g 101 -S bitlbee \
  && make \
  && make install \
  && strip /usr/lib/purple-2/librocketchat.so; fi \
+ && if [ ${MASTODON} -eq 1 ]; then cd /tmp \
+ && git clone -n https://github.com/kensanata/bitlbee-mastodon \
+ && cd bitlbee-mastodon \
+ && git checkout ${MASTODON_VERSION} \
+ && ./autogen.sh \
+ && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
+ && make \
+ && make install; fi \
  && rm -rf /tmp/* \
  && rm -rf /usr/include/bitlbee \
  && rm -f /usr/lib/pkgconfig/bitlbee.pc \
