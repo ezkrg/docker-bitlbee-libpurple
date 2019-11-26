@@ -14,7 +14,7 @@ RUN addgroup -g 101 -S bitlbee \
 	libpurple-oscar \
 	libpurple-bonjour \
  && apk add --no-cache --update --virtual .build-dependencies \
-    build-base \
+	build-base \
 	git \
 	glib-dev \
 	openssl-dev \
@@ -40,7 +40,7 @@ RUN if [ ${FACEBOOK} -eq 1 ]; then cd /tmp \
  && apk add --no-cache --update \
 	json-glib \
  && apk add --no-cache --update --virtual .build-dependencies \
-    build-base \
+	build-base \
 	git \
 	autoconf \
 	automake \
@@ -64,7 +64,7 @@ RUN if [ ${STEAM} -eq 1 ]; then cd /tmp \
  && apk add --no-cache --update \
 	libgcrypt \
  && apk add --no-cache --update --virtual .build-dependencies \
-    build-base \
+	build-base \
 	git \
 	autoconf \
 	automake \
@@ -88,7 +88,7 @@ RUN if [ ${SKYPEWEB} -eq 1 ]; then cd /tmp \
  && apk add --no-cache --update \
 	json-glib \
  && apk add --no-cache --update --virtual .build-dependencies \
-    build-base \
+	build-base \
 	git \
 	pidgin-dev \
 	json-glib-dev \
@@ -112,7 +112,7 @@ RUN if [ ${TELEGRAM} -eq 1 ]; then cd /tmp \
 	libwebp \
 	libpng \
  && apk add --no-cache --update --virtual .build-dependencies \
-    build-base \
+	build-base \
 	git \
 	libgcrypt-dev \
 	zlib-dev \
