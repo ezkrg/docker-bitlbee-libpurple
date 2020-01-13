@@ -1,0 +1,31 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: test
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DHU
+      password:
+        from_secret: DHP
+      repo: ezkrg/bitlbee-libpurple
+      tags: test
+      when:
+        branch:
+          - master
+  - name: release
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: DHU
+      password:
+        from_secret: DHP
+      repo: ezkrg/bitlbee-libpurple
+      tags:
+        - ${DRONE_TAG}
+        - latest
+      when:
+        event:
+          - tag
