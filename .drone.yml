@@ -1,3 +1,4 @@
+---
 kind: pipeline
 type: docker
 name: default
@@ -29,3 +30,8 @@ steps:
       when:
         event:
           - tag
+---
+kind: signature
+hmac: fe1d9f29429b7c966b53377ced1af268d08ddd754b535fe41a930b2a5ee44744
+
+...
