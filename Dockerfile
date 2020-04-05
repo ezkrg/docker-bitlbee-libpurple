@@ -185,7 +185,7 @@ RUN if [ ${SIPE} -eq 1 ]; then cd /tmp \
 	libxml2-dev \
 	pidgin-dev \
  && git clone -n https://repo.or.cz/siplcs.git \
- && cd sipe \
+ && cd siplcs \
  && git checkout ${SIPE_VERSION} \
  && ./autogen.sh \
  && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl --prefix=/usr \
