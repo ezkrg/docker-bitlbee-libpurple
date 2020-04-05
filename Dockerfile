@@ -152,7 +152,7 @@ RUN if [ ${HANGOUTS} -eq 1 ]; then cd /tmp \
  && apk del .build-dependencies; fi
 
 ARG SLACK=1
-ARG SLACK_VERSION=8acc4eb
+ARG SLACK_VERSION=e6e5427
 
 RUN if [ ${SLACK} -eq 1 ]; then cd /tmp \
  && apk add --no-cache --update --virtual .build-dependencies \
