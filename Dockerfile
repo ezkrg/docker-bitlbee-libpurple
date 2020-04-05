@@ -103,7 +103,7 @@ RUN if [ ${SKYPEWEB} -eq 1 ]; then cd /tmp \
  && apk del .build-dependencies; fi
 
 ARG TELEGRAM=1
-ARG TELEGRAM_VERSION=b101bbb
+ARG TELEGRAM_VERSION=v1.4.3
 
 RUN if [ ${TELEGRAM} -eq 1 ]; then cd /tmp \
  && apk add --no-cache --update \
