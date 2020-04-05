@@ -184,6 +184,7 @@ RUN if [ ${SIPE} -eq 1 ]; then cd /tmp \
 	openssl-dev \
 	libxml2-dev \
 	pidgin-dev \
+	flex \
  && git clone -n https://repo.or.cz/siplcs.git \
  && cd siplcs \
  && git checkout ${SIPE_VERSION} \
