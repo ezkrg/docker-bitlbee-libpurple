@@ -170,7 +170,7 @@ RUN if [ ${SLACK} -eq 1 ]; then cd /tmp \
  && apk del .build-dependencies; fi
 
 ARG SIPE=1
-ARG SIPE_VERSION=upstream/1.23.3
+ARG SIPE_VERSION=1.25.0
 
 RUN if [ ${SIPE} -eq 1 ]; then cd /tmp \
  && apk add --no-cache --update --virtual .build-dependencies \
@@ -184,7 +184,7 @@ RUN if [ ${SIPE} -eq 1 ]; then cd /tmp \
 	openssl-dev \
 	libxml2-dev \
 	pidgin-dev \
- && git clone -n https://github.com/tieto/sipe.git \
+ && git clone -n https://repo.or.cz/siplcs.git \
  && cd sipe \
  && git checkout ${SIPE_VERSION} \
  && ./autogen.sh \
