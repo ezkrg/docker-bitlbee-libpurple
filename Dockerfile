@@ -240,7 +240,7 @@ RUN if [ ${ROCKETCHAT} -eq 1 ]; then cd /tmp \
  && apk del .build-dependencies; fi
 
 ARG MASTODON=1
-ARG MASTODON_VERSION=83dee0b
+ARG MASTODON_VERSION=v1.4.4
 
 RUN if [ ${MASTODON} -eq 1 ]; then cd /tmp \
  && apk add --no-cache --update --virtual .build-dependencies \
@@ -253,7 +253,7 @@ RUN if [ ${MASTODON} -eq 1 ]; then cd /tmp \
  && git clone -n https://github.com/kensanata/bitlbee-mastodon \
  && cd bitlbee-mastodon \
  && git checkout ${MASTODON_VERSION} \
- && ./autogen.sh \
+ && sh ./autogen.sh \
  && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
  && make \
  && make install \
