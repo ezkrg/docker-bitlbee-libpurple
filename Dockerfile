@@ -263,7 +263,7 @@ RUN if [ ${MASTODON} -eq 1 ]; then cd /tmp \
 
 ARG MATRIX=1
 ARG OLM_VERSION=3.1.4
-ARG MATRIX_VERSION=4494ba2
+ARG MATRIX_VERSION=1d23385
 
 RUN if [ ${MATRIX} -eq 1 ]; then cd /tmp \
  && apk add --no-cache --update \
