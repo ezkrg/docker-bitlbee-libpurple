@@ -197,7 +197,7 @@ RUN if [ ${SIPE} -eq 1 ]; then cd /tmp \
  && apk del .build-dependencies; fi
 
 ARG DISCORD=1
-ARG DISCORD_VERSION=aa0bbf2
+ARG DISCORD_VERSION=0.4.3
 
 RUN if [ ${DISCORD} -eq 1 ]; then cd /tmp \
  && apk add --no-cache --update --virtual .build-dependencies \
