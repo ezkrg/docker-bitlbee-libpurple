@@ -1,5 +1,11 @@
 # Changelog
 
+## 2020-04-05 14:01:52
+- upgrade telegram version from b101bbb to 1.4.3
+- upgrade slack version from 8acc4eb to e6e5427
+- upgrade sipe version from upstream/1.23.3 to 1.25.0
+- change sipe clone url
+
 ## 2019-11-25 18:13:41 ([revmischa](https://github.com/revmischa))
 - add matrix
 
