@@ -15,7 +15,8 @@ steps:
       tags: test
       when:
         branch:
-          - master
+        - master
+
   - name: release
     image: plugins/docker
     settings:
@@ -29,9 +30,9 @@ steps:
         - latest
       when:
         event:
-          - tag
+        - tag
 ---
 kind: signature
-hmac: fe1d9f29429b7c966b53377ced1af268d08ddd754b535fe41a930b2a5ee44744
+hmac: de7b4e1cbe04b744ed6cad903e7f00d145f9bdd1d34068ba1520a9f3071cb74f
 
 ...
