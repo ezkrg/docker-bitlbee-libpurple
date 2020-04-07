@@ -1,5 +1,10 @@
 # Changelog
 
+## 2020-04-06 10:19:50
+- upgrade discord version from aa0bbf2 to 0.4.3
+- upgrade mastodon version from 83dee0b to v1.4.4
+- upgrade matrix version from 4494ba2 to 1d23385
+
 ## 2020-04-05 14:01:52
 - upgrade telegram version from b101bbb to 1.4.3
 - upgrade slack version from 8acc4eb to e6e5427
