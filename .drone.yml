@@ -4,35 +4,68 @@ type: docker
 name: default
 
 steps:
+  - name: docker
+    image: docker:stable-dind
+    privileged: true
+    detach: true
+    environment:
+      DOCKER_TLS_CERTDIR: /certs
+    volumes:
+    - name: docker-certs-ca
+      path: /certs/ca
+    - name: docker-certs-client
+      path: /certs/client
+
   - name: test
-    image: plugins/docker
-    settings:
-      username:
+    image: docker:stable
+    environment:
+      USER:
         from_secret: DHU
-      password:
+      PASSWORD:
         from_secret: DHP
-      repo: ezkrg/bitlbee-libpurple
-      tags: test
-      when:
-        branch:
-        - master
+      DOCKER_TLS_VERIFY: 1
+      DOCKER_BUILDKIT: 1
+      DOCKER_HOST: tcp://docker:2376
+    volumes:
+    - name: docker-certs-client
+      path: /root/.docker
+    commands:
+    - sleep 20
+    - echo $PASSWORD | docker login --username $USER --password-stdin
+    - docker build -t ezkrg/bitlbee-libpurple:test .
+    - docker push ezkrg/bitlbee-libpurple:test
 
   - name: release
-    image: plugins/docker
-    settings:
-      username:
+    image: docker:stable
+    environment:
+      USER:
         from_secret: DHU
-      password:
+      PASSWORD:
         from_secret: DHP
-      repo: ezkrg/bitlbee-libpurple
-      tags:
-        - ${DRONE_TAG}
-        - latest
-      when:
-        event:
-        - tag
+      DOCKER_TLS_VERIFY: 1
+      DOCKER_BUILDKIT: 1
+      DOCKER_HOST: tcp://docker:2376
+    volumes:
+    - name: docker-certs-client
+      path: /root/.docker
+    commands:
+    - sleep 20
+    - docker tag ezkrg/bitlbee-libpurple:test ezkrg/bitlbee-libpurple:$DRONE_TAG
+    - docker push ezkrg/bitlbee-libpurple:$DRONE_TAG
+    - docker tag ezkrg/bitlbee-libpurple:test ezkrg/bitlbee-libpurple:latest
+    - docker push ezkrg/bitlbee-libpurple:latest
+    when:
+      event:
+      - tag
+
+volumes:
+- name: docker-certs-ca
+  temp: {}
+- name: docker-certs-client
+  temp: {}
+
 ---
 kind: signature
-hmac: de7b4e1cbe04b744ed6cad903e7f00d145f9bdd1d34068ba1520a9f3071cb74f
+hmac: 7d026b8b42b48e66001324e30e7d3f871a84fc92b22aaafb5ea1950af1f2bc7f
 
 ...
