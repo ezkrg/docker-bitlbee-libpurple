@@ -8,13 +8,7 @@ steps:
     image: docker:stable-dind
     privileged: true
     detach: true
-    environment:
-      DOCKER_TLS_CERTDIR: /certs
-    volumes:
-    - name: docker-certs-ca
-      path: /certs/ca
-    - name: docker-certs-client
-      path: /certs/client
+    command: [ "dockerd", "--host=tcp://0.0.0.0:2375" ]
 
   - name: test
     image: docker:stable
@@ -23,12 +17,8 @@ steps:
         from_secret: DHU
       PASSWORD:
         from_secret: DHP
-      DOCKER_TLS_VERIFY: 1
       DOCKER_BUILDKIT: 1
-      DOCKER_HOST: tcp://docker:2376
-    volumes:
-    - name: docker-certs-client
-      path: /root/.docker
+      DOCKER_HOST: tcp://docker:2375
     commands:
     - sleep 20
     - echo $PASSWORD | docker login --username $USER --password-stdin
@@ -42,14 +32,12 @@ steps:
         from_secret: DHU
       PASSWORD:
         from_secret: DHP
-      DOCKER_TLS_VERIFY: 1
       DOCKER_BUILDKIT: 1
-      DOCKER_HOST: tcp://docker:2376
+      DOCKER_HOST: tcp://docker:2375
     volumes:
     - name: docker-certs-client
       path: /root/.docker
     commands:
-    - sleep 20
     - docker tag ezkrg/bitlbee-libpurple:test ezkrg/bitlbee-libpurple:$DRONE_TAG
     - docker push ezkrg/bitlbee-libpurple:$DRONE_TAG
     - docker tag ezkrg/bitlbee-libpurple:test ezkrg/bitlbee-libpurple:latest
@@ -58,14 +46,8 @@ steps:
       event:
       - tag
 
-volumes:
-- name: docker-certs-ca
-  temp: {}
-- name: docker-certs-client
-  temp: {}
-
 ---
 kind: signature
-hmac: 7d026b8b42b48e66001324e30e7d3f871a84fc92b22aaafb5ea1950af1f2bc7f
+hmac: 93c2096e49d600543a3177e2cf2d6b67096377d71f3727f72579da6d39510dec
 
 ...
