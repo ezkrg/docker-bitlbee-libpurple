@@ -11,18 +11,18 @@ steps:
     command: [ "dockerd", "--host=tcp://0.0.0.0:2375" ]
 
   - name: test
-    image: docker:stable
+    image: ezkrg/buildx:latest
     environment:
       USER:
         from_secret: DHU
       PASSWORD:
         from_secret: DHP
-      DOCKER_BUILDKIT: 1
       DOCKER_HOST: tcp://docker:2375
     commands:
     - sleep 20
+    - docker buildx create --use --name docker --node docker --platform linux/amd64 --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
-    - docker build -t ezkrg/bitlbee-libpurple:test .
+    - docker buildx build --load --cache-from ezkrg/cache:bitlbee-libpurple --cache-to ezkrg/cache:bitlbee-libpurple -t ezkrg/bitlbee-libpurple:test .
     - docker push ezkrg/bitlbee-libpurple:test
 
   - name: release
@@ -32,11 +32,7 @@ steps:
         from_secret: DHU
       PASSWORD:
         from_secret: DHP
-      DOCKER_BUILDKIT: 1
       DOCKER_HOST: tcp://docker:2375
-    volumes:
-    - name: docker-certs-client
-      path: /root/.docker
     commands:
     - docker tag ezkrg/bitlbee-libpurple:test ezkrg/bitlbee-libpurple:$DRONE_TAG
     - docker push ezkrg/bitlbee-libpurple:$DRONE_TAG
@@ -48,6 +44,6 @@ steps:
 
 ---
 kind: signature
-hmac: 93c2096e49d600543a3177e2cf2d6b67096377d71f3727f72579da6d39510dec
+hmac: 278f412caada0637ac07903f423d5929b8fad6a58e38add30f4ddbed7e1d800d
 
 ...
