@@ -5,18 +5,33 @@ ARG BITLBEE_VERSION=3.6
 RUN apk add --no-cache --update \
 	bash shadow build-base git python2 autoconf automake libtool mercurial intltool flex \
 	glib-dev openssl-dev pidgin-dev json-glib-dev libgcrypt-dev zlib-dev libwebp-dev \
-	libpng-dev protobuf-c-dev libxml2-dev discount-dev sqlite-dev http-parser-dev \
+	libpng-dev protobuf-c-dev libxml2-dev discount-dev sqlite-dev http-parser-dev libotr-dev \
  && cd /tmp \
  && git clone -n https://github.com/bitlbee/bitlbee.git \
  && cd bitlbee \
  && git checkout ${BITLBEE_VERSION} \
- && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl --purple=1 --ssl=openssl --prefix=/usr --etcdir=/etc/bitlbee \
+ && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
+ 				--purple=1 --otr=plugin --ssl=openssl --prefix=/usr --etcdir=/etc/bitlbee \
  && make \
- && make install \
+ && make install-bin \
+ && make install-doc \
  && make install-dev \
  && make install-etc \
  && strip /usr/sbin/bitlbee \
  && touch /nowhere
+
+# ---
+
+FROM bitlbee-build as otr-install
+
+ARG OTR=1
+
+RUN if [ ${OTR} -eq 1 ]; \
+	 then cd /tmp/bitlbee \
+	   && make install-plugin-otr; \
+	 else mkdir -p /usr/lib/bitlbee \
+ 	   && ln -sf /nowhere /usr/lib/bitlbee/otr.so; \
+	fi
 
 # ---
 
@@ -269,6 +284,8 @@ COPY --from=bitlbee-build /usr/share/bitlbee /tmp/usr/share/bitlbee
 COPY --from=bitlbee-build /usr/lib/pkgconfig/bitlbee.pc /tmp/usr/lib/pkgconfig/bitlbee.pc
 COPY --from=bitlbee-build /etc/bitlbee /tmp/etc/bitlbee
 
+COPY --from=otr-install /usr/lib/bitlbee/otr.so /tmp/usr/lib/bitlbee/otr.so
+
 COPY --from=facebook-build /usr/lib/bitlbee/facebook.so /tmp/usr/lib/bitlbee/facebook.so
 COPY --from=facebook-build /usr/lib/bitlbee/facebook.la /tmp/usr/lib/bitlbee/facebook.la
 
@@ -318,7 +335,7 @@ RUN addgroup -g 101 -S bitlbee \
  && apk add --no-cache --update \
  	tzdata bash glib libssl1.1 libpurple libpurple-xmpp \
 	libpurple-oscar libpurple-bonjour json-glib libgcrypt zlib \
-	libwebp libpng protobuf-c discount sqlite http-parser
+	libwebp libpng protobuf-c discount sqlite http-parser libotr
 
 EXPOSE 6667
 
