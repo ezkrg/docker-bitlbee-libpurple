@@ -1,5 +1,8 @@
 # Changelog
 
+## 2020-04-09 20:27:51
+- add otr
+
 ## 2020-04-06 10:19:50
 - upgrade discord version from aa0bbf2 to 0.4.3
 - upgrade mastodon version from 83dee0b to v1.4.4
