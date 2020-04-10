@@ -10,8 +10,7 @@ RUN apk add --no-cache --update \
  && git clone -n https://github.com/bitlbee/bitlbee.git \
  && cd bitlbee \
  && git checkout ${BITLBEE_VERSION} \
- && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
-                 --purple=1 --otr=plugin --ssl=openssl --prefix=/usr --etcdir=/etc/bitlbee \
+ && ./configure --purple=1 --otr=plugin --ssl=openssl --prefix=/usr --etcdir=/etc/bitlbee \
  && make \
  && make install-bin \
  && make install-doc \
@@ -47,7 +46,7 @@ RUN echo FACEBOOK=${FACEBOOK} > /tmp/status \
        && git clone -n https://github.com/bitlbee/bitlbee-facebook.git \
        && cd bitlbee-facebook \
        && git checkout ${FACEBOOK_VERSION} \
-       && ./autogen.sh --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
+       && ./autogen.sh \
        && make \
        && make install \
        && strip /usr/lib/bitlbee/facebook.so; \
@@ -69,7 +68,7 @@ RUN echo STEAM=${STEAM} > /tmp/status \
        && git clone -n https://github.com/bitlbee/bitlbee-steam.git \
        && cd bitlbee-steam \
        && git checkout ${STEAM_VERSION} \
-       && ./autogen.sh --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
+       && ./autogen.sh \
        && make \
        && make install \
        && strip /usr/lib/bitlbee/steam.so; \
@@ -113,7 +112,7 @@ RUN echo TELEGRAM=${TELEGRAM} > /tmp/status \
        && cd telegram-purple \
        && git checkout ${TELEGRAM_VERSION} \
        && git submodule update --init --recursive \
-       && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
+       && ./configure \
        && make \
        && make install \
        && strip /usr/lib/purple-2/telegram-purple.so; \
@@ -179,7 +178,7 @@ RUN echo SIPE=${SIPE} > /tmp/status \
        && cd siplcs \
        && git checkout ${SIPE_VERSION} \
        && ./autogen.sh \
-       && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl --prefix=/usr \
+       && ./configure --prefix=/usr \
        && make \
        && make install \
        && strip /usr/lib/purple-2/libsipe.so; \
@@ -203,7 +202,7 @@ RUN echo DISCORD=${DISCORD} > /tmp/status \
        && cd bitlbee-discord \
        && git checkout ${DISCORD_VERSION} \
        && ./autogen.sh \
-       && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl --prefix=/usr \
+       && ./configure --prefix=/usr \
        && make \
        && make install \
        && strip /usr/lib/bitlbee/discord.so; \
@@ -246,7 +245,7 @@ RUN echo MASTODON=${MASTODON} > /tmp/status \
        && cd bitlbee-mastodon \
        && git checkout ${MASTODON_VERSION} \
        && sh ./autogen.sh \
-       && ./configure --build=x86_64-alpine-linux-musl --host=x86_64-alpine-linux-musl \
+       && ./configure \
        && make \
        && make install \
        && strip /usr/lib/bitlbee/mastodon.so; \
