@@ -357,30 +357,19 @@ COPY --from=bitlbee-plugins /tmp/ /
 ARG PKGS="tzdata bash glib libssl1.1 libpurple libpurple-xmpp \
       libpurple-oscar libpurple-bonjour"
 
-ARG OTR_PKGS="libotr"
-ARG FACEBOOK_PKGS="json-glib"
-ARG STEAM_PKGS="libgcrypt"
-ARG SKYPEWEB_PKGS="json-glib"
-ARG TELEGRAM_PKGS="libgcrypt zlib libwebp libpng"
-ARG HANGOUTS_PKGS="protobuf-c json-glib"
-ARG SIPE_PKGS="libxml2"
-ARG ROCKETCHAT_PKGS="discount json-glib"
-ARG MATRIX_PKGS="sqlite http-parser libgcrypt json-glib"
-
 RUN addgroup -g 101 -S bitlbee \
  && adduser -u 101 -D -S -G bitlbee bitlbee \
  && install -d -m 750 -o bitlbee -g bitlbee /var/lib/bitlbee \
  && source /plugins \
- && [ ${OTR} -eq 1 ] && PKGS="${PKGS} ${OTR_PKGS}" \
- && [ ${FACEBOOK} -eq 1 ] && PKGS="${PKGS} ${FACEBOOK_PKGS}" \
- && [ ${STEAM} -eq 1 ] && PKGS="${PKGS} ${STEAM_PKGS}" \
- && [ ${SKYPEWEB} -eq 1 ] && PKGS="${PKGS} ${SKYPEWEB_PKGS}" \
- && [ ${TELEGRAM} -eq 1 ] && PKGS="${PKGS} ${TELEGRAM_PKGS}" \
- && [ ${HANGOUTS} -eq 1 ] && PKGS="${PKGS} ${HANGOUTS_PKGS}" \
- && [ ${SIPE} -eq 1 ] && PKGS="${PKGS} ${SIPE_PKGS}" \
- && [ ${ROCKETCHAT} -eq 1 ] && PKGS="${PKGS} ${ROCKETCHAT_PKGS}" \
- && [ ${MATRIX} -eq 1 ] && PKGS="${PKGS} ${MATRIX_PKGS}" \
- && PKGS=$(echo ${PKGS} | xargs -n1 | sort | uniq | xargs) \
+ && if [ ${OTR} -eq 1 ]; then PKGS="${PKGS} libotr"; fi \
+ && if [ ${FACEBOOK} -eq 1 ] || [ ${SKYPEWEB} -eq 1 ] || [ ${HANGOUTS} -eq 1 ] \
+ || [ ${ROCKETCHAT} -eq 1 ] || [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} json-glib"; fi \
+ && if [ ${STEAM} -eq 1 ] || [ ${TELEGRAM} -eq 1 ] || [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} libgcrypt"; fi \
+ && if [ ${TELEGRAM} -eq 1 ]; then PKGS="${PKGS} zlib libwebp libpng"; fi \
+ && if [ ${HANGOUTS} -eq 1 ]; then PKGS="${PKGS} protobuf-c"; fi \
+ && if [ ${SIPE} -eq 1 ]; then PKGS="${PKGS} libxml2"; fi \
+ && if [ ${ROCKETCHAT} -eq 1 ]; then PKGS="${PKGS} discount"; fi \
+ && if [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} sqlite http-parser"; fi \
  && apk add --no-cache --update ${PKGS} \
  && rm /plugins
 
