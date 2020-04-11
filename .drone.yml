@@ -19,7 +19,7 @@ steps:
         from_secret: DHP
       DOCKER_HOST: tcp://docker:2375
     commands:
-    - sleep 20
+    - sleep 5
     - docker buildx create --use --name docker --node docker --platform linux/amd64 --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
     - docker buildx build --load --cache-from ezkrg/cache:bitlbee-libpurple --cache-to ezkrg/cache:bitlbee-libpurple -t ezkrg/bitlbee-libpurple:test .
@@ -42,8 +42,22 @@ steps:
       event:
       - tag
 
+  - name: telegram
+    image: appleboy/drone-telegram
+    settings:
+      token:
+        from_secret: TT
+      to:
+        from_secret: TID
+      message: >
+        {{#success build.status}}
+          {{repo.name}} build succeeded in {{since build.started}}.
+        {{else}}
+           {{repo.name}} build failed.
+        {{/success}}
+
 ---
 kind: signature
-hmac: 278f412caada0637ac07903f423d5929b8fad6a58e38add30f4ddbed7e1d800d
+hmac: 7e7907ad2eb2381f02ee2ad0c97864815814b5d86adde53ad3a32a5899e4c284
 
 ...
