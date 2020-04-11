@@ -1,4 +1,6 @@
-FROM alpine:3.10 as bitlbee-build
+ARG ALPINE_VERSION=3.11
+
+FROM alpine:${ALPINE_VERSION} as bitlbee-build
 
 ARG BITLBEE_VERSION=3.6
 
@@ -286,7 +288,7 @@ RUN echo MATRIX=${MATRIX} > /tmp/status \
 
 # ---
 
-FROM alpine:3.10 as bitlbee-plugins
+FROM alpine:${ALPINE_VERSION} as bitlbee-plugins
 
 COPY --from=bitlbee-build /usr/sbin/bitlbee /tmp/usr/sbin/bitlbee
 COPY --from=bitlbee-build /usr/share/man/man8/bitlbee.8 /tmp/usr/share/man/man8/bitlbee.8
@@ -350,7 +352,7 @@ RUN apk add --update --no-cache findutils \
 
 # ---
 
-FROM alpine:3.10 as bitlbee-libpurple
+FROM alpine:${ALPINE_VERSION} as bitlbee-libpurple
 
 COPY --from=bitlbee-plugins /tmp/ /
 
