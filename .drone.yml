@@ -49,12 +49,11 @@ steps:
         from_secret: TT
       to:
         from_secret: TID
-      message: >
-        {{#success build.status}}
-          {{repo.name}} build succeeded in {{since build.started}}.
-        {{else}}
-           {{repo.name}} build failed.
-        {{/success}}
+      message: |
+        *{{commit.author}}*  
+        {{#success build.status}}✅{{else}}❌{{/success}} *{{repo.namespace}}/{{repo.name}}*  
+        [Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{duration build.started build.finished}}]({{build.link}})  
+        *Branch:* [{{commit.branch}}](https://github.com/{{repo.namespace}}/{{repo.name}}/commits/{{commit.branch}}) *Commit:* [{{commit.message}}]({{commit.link}})
 
 ---
 kind: signature
