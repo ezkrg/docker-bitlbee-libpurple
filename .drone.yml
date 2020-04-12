@@ -47,6 +47,9 @@ kind: pipeline
 type: docker
 name: notification
 
+clone:
+  disable: true
+
 steps:
   - name: telegram
     image: appleboy/drone-telegram
@@ -66,6 +69,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: d151f748b5708f7078c43a961087ebab72b24849530aac943a9e3253fcdf0fda
+hmac: ef9d7a3c5ee23dc4ca5e981fc15da6dcbbbcf60fe05fc6367ca5b7ea614ba635
 
 ...
