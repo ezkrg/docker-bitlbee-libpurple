@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: docker
-name: default
+name: docker
 
 steps:
   - name: docker
@@ -42,6 +42,12 @@ steps:
       event:
       - tag
 
+---
+kind: pipeline 
+type: docker
+name: notification
+
+steps:
   - name: telegram
     image: appleboy/drone-telegram
     settings:
@@ -55,8 +61,11 @@ steps:
         [Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{duration build.started build.finished}}]({{build.link}})  
         *Branch:* [{{commit.branch}}](https://github.com/{{repo.namespace}}/{{repo.name}}/commits/{{commit.branch}}) *Commit:* [{{commit.message}}]({{commit.link}})
 
+depends_on:
+  - docker
+
 ---
 kind: signature
-hmac: 7e7907ad2eb2381f02ee2ad0c97864815814b5d86adde53ad3a32a5899e4c284
+hmac: d151f748b5708f7078c43a961087ebab72b24849530aac943a9e3253fcdf0fda
 
 ...
