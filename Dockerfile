@@ -149,7 +149,7 @@ RUN echo HANGOUTS=${HANGOUTS} > /tmp/status \
 FROM bitlbee-build as slack-build
 
 ARG SLACK=1
-ARG SLACK_VERSION=e6e5427
+ARG SLACK_VERSION=2e9fa02
 
 SHELL [ "/bin/bash", "-c" ]
 
