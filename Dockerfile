@@ -129,13 +129,14 @@ RUN echo TELEGRAM=${TELEGRAM} > /tmp/status \
 FROM bitlbee-build as hangouts-build
 
 ARG HANGOUTS=1
-ARG HANGOUTS_VERSION=3f7d89b
+ARG HANGOUTS_VERSION=efa7a53
 
 RUN echo HANGOUTS=${HANGOUTS} > /tmp/status \
  && if [ ${HANGOUTS} -eq 1 ]; \
      then cd /tmp \
-       && hg clone https://bitbucket.org/EionRobb/purple-hangouts -r ${HANGOUTS_VERSION} \
+       && git clone -n https://github.com/EionRobb/purple-hangouts.git \
        && cd purple-hangouts \
+       && git checkout ${HANGOUTS_VERSION} \
        && make \
        && make install \
        && strip /usr/lib/purple-2/libhangouts.so; \
@@ -219,13 +220,14 @@ RUN echo DISCORD=${DISCORD} > /tmp/status \
 FROM bitlbee-build as rocketchat-build
 
 ARG ROCKETCHAT=1
-ARG ROCKETCHAT_VERSION=826990b
+ARG ROCKETCHAT_VERSION=5da3e14
 
 RUN echo ROCKETCHAT=${ROCKETCHAT} > /tmp/status \
  && if [ ${ROCKETCHAT} -eq 1 ]; \
      then cd /tmp \
-       && hg clone https://bitbucket.org/EionRobb/purple-rocketchat -r ${ROCKETCHAT_VERSION} \
+       && git clone -n https://github.com/EionRobb/purple-rocketchat.git \
        && cd purple-rocketchat \
+       && git checkout ${ROCKETCHAT_VERSION} \
        && make \
        && make install \
        && strip /usr/lib/purple-2/librocketchat.so; \
