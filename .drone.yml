@@ -34,6 +34,7 @@ steps:
         from_secret: DHP
       DOCKER_HOST: tcp://docker:2375
     commands:
+    - echo $PASSWORD | docker login --username $USER --password-stdin
     - docker tag ezkrg/bitlbee-libpurple:test ezkrg/bitlbee-libpurple:$DRONE_TAG
     - docker push ezkrg/bitlbee-libpurple:$DRONE_TAG
     - docker tag ezkrg/bitlbee-libpurple:test ezkrg/bitlbee-libpurple:latest
@@ -70,6 +71,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 398e60831de7edd87d66faf19562aacc2e966a2b98a9ce9ff474971250d3f6fe
+hmac: 6d34136b0fc3ae4a1c12e759c5eb553b3be864760bf1efd26c3b2b00b711229a
 
 ...
