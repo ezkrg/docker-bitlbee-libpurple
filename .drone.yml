@@ -52,7 +52,7 @@ clone:
 
 steps:
   - name: telegram
-    image: appleboy/drone-telegram
+    image: appleboy/drone-telegram:1.3.4
     failure: ignore
     settings:
       token:
@@ -62,7 +62,7 @@ steps:
       message: |
         *{{commit.author}} ({{commit.email}})*  
         *{{repo.namespace}}/{{repo.name}}*  
-        [Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{since build.started}}]({{build.link}}) {{#success build.status}}✅{{else}}❌{{/success}}  
+        [Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{duration build.started build.finished}}]({{build.link}}) {{#success build.status}}✅{{else}}❌{{/success}}  
         *Branch:* [{{commit.branch}}](https://github.com/{{repo.namespace}}/{{repo.name}}/commits/{{commit.branch}}) *Commit:* [{{commit.message}}]({{commit.link}})
 
 depends_on:
@@ -70,6 +70,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: c54a3855a1b3bfaf8682ddb132be8b0688a18e6c8cebb04ae8ba0cc074f07837
+hmac: 398e60831de7edd87d66faf19562aacc2e966a2b98a9ce9ff474971250d3f6fe
 
 ...
