@@ -61,7 +61,7 @@ steps:
       message: |
         *{{commit.author}} ({{commit.email}})*  
         *{{repo.namespace}}/{{repo.name}}*  
-        [Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{duration build.started build.finished}}]({{build.link}}) {{#success build.status}}✅{{else}}❌{{/success}}  
+        [Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{since build.started}}]({{build.link}}) {{#success build.status}}✅{{else}}❌{{/success}}  
         *Branch:* [{{commit.branch}}](https://github.com/{{repo.namespace}}/{{repo.name}}/commits/{{commit.branch}}) *Commit:* [{{commit.message}}]({{commit.link}})
 
 depends_on:
