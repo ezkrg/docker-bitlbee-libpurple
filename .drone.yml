@@ -53,6 +53,7 @@ clone:
 steps:
   - name: telegram
     image: appleboy/drone-telegram
+    failure: ignore
     settings:
       token:
         from_secret: TT
