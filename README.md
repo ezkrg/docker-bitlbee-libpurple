@@ -12,6 +12,7 @@ This docker image includes bitlbee with a bunch of useful plugins:
   - [rocket.chat](https://bitbucket.org/EionRobb/purple-rocketchat)
   - [mastodon](https://github.com/kensanata/bitlbee-mastodon)
   - [matrix](https://github.com/matrix-org/purple-matrix)
+  - [signal](https://github.com/hoehermann/libpurple-signald)
 
 The most significant being the [libpurple Slack plugin](https://github.com/dylex/slack-libpurple). As Slack is turning off its IRC gateway on May 15 2018, now is the time to spin up your own docker image and start using bitlbee instead.
 

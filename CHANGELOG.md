@@ -1,5 +1,8 @@
 # Changelog
 
+## 2020-11-04 03:16:34 ([heywoodlh](https://github.com/heywoodlh))
+- add signal
+
 ## 2020-04-09 20:27:51
 - add otr
 
