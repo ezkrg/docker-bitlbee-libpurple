@@ -290,6 +290,27 @@ RUN echo MATRIX=${MATRIX} > /tmp/status \
 
 # ---
 
+FROM bitlbee-build as signald-build
+
+ARG SIGNAL=1
+ARG SIGNAL_VERSION=af18341
+
+RUN echo SIGNAL=${SIGNAL} > /tmp/status \
+ && if [ ${SIGNAL} -eq 1 ]; \
+     then cd /tmp \
+       && git clone -n https://github.com/hoehermann/libpurple-signald \
+       && cd libpurple-signald \
+       && git checkout ${SIGNAL_VERSION} \
+       && make \
+       && make install \
+       && strip /usr/lib/purple-2/libsignald.so; \
+     else mkdir -p /usr/lib/purple-2 \
+       && ln -sf /nowhere /usr/lib/purple-2/libsignald.so; \
+    fi
+
+# ---
+
+
 FROM alpine:${ALPINE_VERSION} as bitlbee-plugins
 
 COPY --from=bitlbee-build /usr/sbin/bitlbee /tmp/usr/sbin/bitlbee
@@ -345,6 +366,9 @@ COPY --from=mastodon-build /tmp/status /tmp/plugin/mastodon
 COPY --from=matrix-build /usr/local/lib/libolm.so.3.1.4 /tmp/usr/local/lib/libolm.so.3
 COPY --from=matrix-build /usr/lib/purple-2/libmatrix.so /tmp/usr/lib/purple-2/libmatrix.so
 COPY --from=matrix-build /tmp/status /tmp/plugin/matrix
+
+COPY --from=signald-build /usr/lib/purple-2/libsignald.so /tmp/usr/lib/purple-2/libsignald.so
+COPY --from=signald-build /tmp/status /tmp/plugin/signald
 
 RUN apk add --update --no-cache findutils \
  && find /tmp/ -type f -empty -delete \
