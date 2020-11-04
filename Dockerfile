@@ -310,7 +310,6 @@ RUN echo SIGNAL=${SIGNAL} > /tmp/status \
 
 # ---
 
-
 FROM alpine:${ALPINE_VERSION} as bitlbee-plugins
 
 COPY --from=bitlbee-build /usr/sbin/bitlbee /tmp/usr/sbin/bitlbee
@@ -391,10 +390,10 @@ RUN addgroup -g 101 -S bitlbee \
  && source /plugins \
  && if [ ${OTR} -eq 1 ]; then PKGS="${PKGS} libotr"; fi \
  && if [ ${FACEBOOK} -eq 1 ] || [ ${SKYPEWEB} -eq 1 ] || [ ${HANGOUTS} -eq 1 ] \
- || [ ${ROCKETCHAT} -eq 1 ] || [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} json-glib"; fi \
+ || [ ${ROCKETCHAT} -eq 1 ] || [ ${MATRIX} -eq 1 ] || [ ${SIGNAL} -eq 1 ]; then PKGS="${PKGS} json-glib"; fi \
  && if [ ${STEAM} -eq 1 ] || [ ${TELEGRAM} -eq 1 ] || [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} libgcrypt"; fi \
  && if [ ${TELEGRAM} -eq 1 ]; then PKGS="${PKGS} zlib libwebp libpng"; fi \
- && if [ ${HANGOUTS} -eq 1 ]; then PKGS="${PKGS} protobuf-c"; fi \
+ && if [ ${HANGOUTS} -eq 1 ] || [ ${SIGNAL} -eq 1 ]; then PKGS="${PKGS} protobuf-c"; fi \
  && if [ ${SIPE} -eq 1 ]; then PKGS="${PKGS} libxml2"; fi \
  && if [ ${ROCKETCHAT} -eq 1 ]; then PKGS="${PKGS} discount"; fi \
  && if [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} sqlite http-parser"; fi \
