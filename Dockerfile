@@ -293,7 +293,7 @@ RUN echo MATRIX=${MATRIX} > /tmp/status \
 FROM bitlbee-build as signald-build
 
 ARG SIGNAL=1
-ARG SIGNAL_VERSION=af18341
+ARG SIGNAL_VERSION=f53a118
 
 RUN echo SIGNAL=${SIGNAL} > /tmp/status \
  && if [ ${SIGNAL} -eq 1 ]; \
