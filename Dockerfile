@@ -40,7 +40,7 @@ RUN echo OTR=${OTR} > /tmp/status \
 FROM bitlbee-build as facebook-build
 
 ARG FACEBOOK=1
-ARG FACEBOOK_VERSION=v1.2.0
+ARG FACEBOOK_VERSION=v1.2.2
 
 RUN echo FACEBOOK=${FACEBOOK} > /tmp/status \
  && if [ ${FACEBOOK} -eq 1 ]; \
