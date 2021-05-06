@@ -84,7 +84,7 @@ RUN echo STEAM=${STEAM} > /tmp/status \
 FROM bitlbee-build as skypeweb-build
 
 ARG SKYPEWEB=1
-ARG SKYPEWEB_VERSION=f836eeb
+ARG SKYPEWEB_VERSION=c4906b8
 
 RUN echo SKYPEWEB=${SKYPEWEB} > /tmp/status \
  && if [ ${SKYPEWEB} -eq 1 ]; \
