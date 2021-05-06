@@ -1,5 +1,9 @@
 # Changelog
 
+## 2021-05-06 15:21:19
+- update facebook version to 1.2.2
+- update skypeweb to c4906b8
+
 ## 2020-11-04 03:16:34 ([heywoodlh](https://github.com/heywoodlh))
 - add signal
 
