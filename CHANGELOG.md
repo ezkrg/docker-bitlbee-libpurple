@@ -1,5 +1,8 @@
 # Changelog
 
+## 2021-05-14 17:05:39
+- add icyque
+
 ## 2021-05-06 15:21:19
 - update facebook version to 1.2.2
 - update skypeweb to c4906b8

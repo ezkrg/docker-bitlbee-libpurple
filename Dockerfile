@@ -310,6 +310,26 @@ RUN echo SIGNAL=${SIGNAL} > /tmp/status \
 
 # ---
 
+FROM bitlbee-build as icyque-build
+
+ARG ICYQUE=1
+ARG ICYQUE_VERSION=4fc08a0
+
+RUN echo ICYQUE=${ICYQUE} > /tmp/status \
+ && if [ ${ICYQUE} -eq 1 ]; \
+     then cd /tmp \
+       && git clone -n https://github.com/EionRobb/icyque.git \
+       && cd icyque \
+       && git checkout ${ICYQUE_VERSION} \
+       && make \
+       && make install \
+       && strip /usr/lib/purple-2/libicyque.so; \
+     else mkdir -p /usr/lib/purple-2 \
+       && ln -sf /nowhere /usr/lib/purple-2/libicyque.so; \
+    fi
+
+# ---
+
 FROM alpine:${ALPINE_VERSION} as bitlbee-plugins
 
 COPY --from=bitlbee-build /usr/sbin/bitlbee /tmp/usr/sbin/bitlbee
@@ -369,6 +389,9 @@ COPY --from=matrix-build /tmp/status /tmp/plugin/matrix
 COPY --from=signald-build /usr/lib/purple-2/libsignald.so /tmp/usr/lib/purple-2/libsignald.so
 COPY --from=signald-build /tmp/status /tmp/plugin/signald
 
+COPY --from=icyque-build /usr/lib/purple-2/libicyque.so /tmp/usr/lib/purple-2/libicyque.so
+COPY --from=icyque-build /tmp/status /tmp/plugin/icyque
+
 RUN apk add --update --no-cache findutils \
  && find /tmp/ -type f -empty -delete \
  && find /tmp/ -type d -empty -delete \
@@ -390,7 +413,8 @@ RUN addgroup -g 101 -S bitlbee \
  && source /plugins \
  && if [ ${OTR} -eq 1 ]; then PKGS="${PKGS} libotr"; fi \
  && if [ ${FACEBOOK} -eq 1 ] || [ ${SKYPEWEB} -eq 1 ] || [ ${HANGOUTS} -eq 1 ] \
- || [ ${ROCKETCHAT} -eq 1 ] || [ ${MATRIX} -eq 1 ] || [ ${SIGNAL} -eq 1 ]; then PKGS="${PKGS} json-glib"; fi \
+ || [ ${ROCKETCHAT} -eq 1 ] || [ ${MATRIX} -eq 1 ] || [ ${SIGNAL} -eq 1 ] \
+ || [ ${ICYQUE} -eq 1 ]; then PKGS="${PKGS} json-glib"; fi \
  && if [ ${STEAM} -eq 1 ] || [ ${TELEGRAM} -eq 1 ] || [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} libgcrypt"; fi \
  && if [ ${TELEGRAM} -eq 1 ]; then PKGS="${PKGS} zlib libwebp libpng"; fi \
  && if [ ${HANGOUTS} -eq 1 ] || [ ${SIGNAL} -eq 1 ]; then PKGS="${PKGS} protobuf-c"; fi \
