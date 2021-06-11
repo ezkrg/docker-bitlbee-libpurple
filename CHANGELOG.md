@@ -1,5 +1,12 @@
 # Changelog
 
+## 2021-06-11 19:23:13
+- update hangouts
+- update slack
+- update rocket.chat
+- update olm and matrix
+- update signal
+
 ## 2021-05-14 17:05:39
 - add icyque
 

@@ -129,7 +129,7 @@ RUN echo TELEGRAM=${TELEGRAM} > /tmp/status \
 FROM bitlbee-build as hangouts-build
 
 ARG HANGOUTS=1
-ARG HANGOUTS_VERSION=efa7a53
+ARG HANGOUTS_VERSION=e8c8088
 
 RUN echo HANGOUTS=${HANGOUTS} > /tmp/status \
  && if [ ${HANGOUTS} -eq 1 ]; \
@@ -149,7 +149,7 @@ RUN echo HANGOUTS=${HANGOUTS} > /tmp/status \
 FROM bitlbee-build as slack-build
 
 ARG SLACK=1
-ARG SLACK_VERSION=2e9fa02
+ARG SLACK_VERSION=e0c73ae
 
 SHELL [ "/bin/bash", "-c" ]
 
@@ -220,7 +220,7 @@ RUN echo DISCORD=${DISCORD} > /tmp/status \
 FROM bitlbee-build as rocketchat-build
 
 ARG ROCKETCHAT=1
-ARG ROCKETCHAT_VERSION=5da3e14
+ARG ROCKETCHAT_VERSION=62090bc
 
 RUN echo ROCKETCHAT=${ROCKETCHAT} > /tmp/status \
  && if [ ${ROCKETCHAT} -eq 1 ]; \
@@ -264,8 +264,8 @@ RUN echo MASTODON=${MASTODON} > /tmp/status \
 FROM bitlbee-build as matrix-build
 
 ARG MATRIX=1
-ARG OLM_VERSION=3.1.4
-ARG MATRIX_VERSION=1d23385
+ARG OLM_VERSION=3.2.4
+ARG MATRIX_VERSION=2fcd5b8
 
 RUN echo MATRIX=${MATRIX} > /tmp/status \
  && if [ ${MATRIX} -eq 1 ]; \
@@ -293,7 +293,7 @@ RUN echo MATRIX=${MATRIX} > /tmp/status \
 FROM bitlbee-build as signald-build
 
 ARG SIGNAL=1
-ARG SIGNAL_VERSION=f53a118
+ARG SIGNAL_VERSION=v0.8.1
 
 RUN echo SIGNAL=${SIGNAL} > /tmp/status \
  && if [ ${SIGNAL} -eq 1 ]; \
