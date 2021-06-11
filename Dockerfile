@@ -384,7 +384,7 @@ COPY --from=mastodon-build /usr/lib/bitlbee/mastodon.la /tmp/usr/lib/bitlbee/mas
 COPY --from=mastodon-build /usr/share/bitlbee/mastodon-help.txt /tmp/usr/share/bitlbee/mastodon-help.txt
 COPY --from=mastodon-build /tmp/status /tmp/plugin/mastodon
 
-COPY --from=matrix-build /usr/local/lib/libolm.so.3.1.4 /tmp/usr/local/lib/libolm.so.3
+COPY --from=matrix-build /usr/local/lib/libolm.so.3.2.4 /tmp/usr/local/lib/libolm.so.3
 COPY --from=matrix-build /usr/lib/purple-2/libmatrix.so /tmp/usr/lib/purple-2/libmatrix.so
 COPY --from=matrix-build /tmp/status /tmp/plugin/matrix
 
