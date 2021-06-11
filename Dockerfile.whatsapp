@@ -7,7 +7,7 @@ ARG BITLBEE_VERSION=3.6
 RUN apk add --no-cache --update \
     bash shadow build-base git python2 autoconf automake libtool mercurial intltool flex \
     glib-dev openssl-dev pidgin-dev json-glib-dev libgcrypt-dev zlib-dev libwebp-dev \
-    libpng-dev protobuf-c-dev libxml2-dev discount-dev sqlite-dev http-parser-dev libotr-dev \
+    libpng-dev protobuf-c-dev libxml2-dev discount-dev sqlite-dev http-parser-dev libotr-dev go \
  && cd /tmp \
  && git clone -n https://github.com/bitlbee/bitlbee.git \
  && cd bitlbee \
@@ -84,7 +84,7 @@ RUN echo STEAM=${STEAM} > /tmp/status \
 FROM bitlbee-build as skypeweb-build
 
 ARG SKYPEWEB=1
-ARG SKYPEWEB_VERSION=c4906b8
+ARG SKYPEWEB_VERSION=1.6
 
 RUN echo SKYPEWEB=${SKYPEWEB} > /tmp/status \
  && if [ ${SKYPEWEB} -eq 1 ]; \
@@ -129,7 +129,7 @@ RUN echo TELEGRAM=${TELEGRAM} > /tmp/status \
 FROM bitlbee-build as hangouts-build
 
 ARG HANGOUTS=1
-ARG HANGOUTS_VERSION=e8c8088
+ARG HANGOUTS_VERSION=efa7a53
 
 RUN echo HANGOUTS=${HANGOUTS} > /tmp/status \
  && if [ ${HANGOUTS} -eq 1 ]; \
@@ -149,7 +149,7 @@ RUN echo HANGOUTS=${HANGOUTS} > /tmp/status \
 FROM bitlbee-build as slack-build
 
 ARG SLACK=1
-ARG SLACK_VERSION=e0c73ae
+ARG SLACK_VERSION=2e9fa02
 
 SHELL [ "/bin/bash", "-c" ]
 
@@ -220,7 +220,7 @@ RUN echo DISCORD=${DISCORD} > /tmp/status \
 FROM bitlbee-build as rocketchat-build
 
 ARG ROCKETCHAT=1
-ARG ROCKETCHAT_VERSION=62090bc
+ARG ROCKETCHAT_VERSION=5da3e14
 
 RUN echo ROCKETCHAT=${ROCKETCHAT} > /tmp/status \
  && if [ ${ROCKETCHAT} -eq 1 ]; \
@@ -264,8 +264,8 @@ RUN echo MASTODON=${MASTODON} > /tmp/status \
 FROM bitlbee-build as matrix-build
 
 ARG MATRIX=1
-ARG OLM_VERSION=3.2.4
-ARG MATRIX_VERSION=2fcd5b8
+ARG OLM_VERSION=3.1.4
+ARG MATRIX_VERSION=1d23385
 
 RUN echo MATRIX=${MATRIX} > /tmp/status \
  && if [ ${MATRIX} -eq 1 ]; \
@@ -284,7 +284,7 @@ RUN echo MATRIX=${MATRIX} > /tmp/status \
        && make install \
        && strip /usr/lib/purple-2/libmatrix.so; \
      else mkdir -p /usr/lib/purple-2 \
-       && ln -sf /nowhere /usr/local/lib/libolm.so \
+       && ln -sf /nowhere /usr/local/lib/libolm.so.3.1.4 \
        && ln -sf /nowhere /usr/lib/purple-2/libmatrix.so; \
     fi
 
@@ -293,7 +293,7 @@ RUN echo MATRIX=${MATRIX} > /tmp/status \
 FROM bitlbee-build as signald-build
 
 ARG SIGNAL=1
-ARG SIGNAL_VERSION=v0.8.1
+ARG SIGNAL_VERSION=af18341
 
 RUN echo SIGNAL=${SIGNAL} > /tmp/status \
  && if [ ${SIGNAL} -eq 1 ]; \
@@ -301,8 +301,6 @@ RUN echo SIGNAL=${SIGNAL} > /tmp/status \
        && git clone -n https://github.com/hoehermann/libpurple-signald \
        && cd libpurple-signald \
        && git checkout ${SIGNAL_VERSION} \
-       && git submodule init \
-       && git submodule update \
        && make \
        && make install \
        && strip /usr/lib/purple-2/libsignald.so; \
@@ -312,22 +310,22 @@ RUN echo SIGNAL=${SIGNAL} > /tmp/status \
 
 # ---
 
-FROM bitlbee-build as icyque-build
+FROM bitlbee-build as whatsapp-build
 
-ARG ICYQUE=1
-ARG ICYQUE_VERSION=4fc08a0
+ARG WHATSAPP=0
+ARG WHATSAPP_VERSION=f0802d1
 
-RUN echo ICYQUE=${ICYQUE} > /tmp/status \
- && if [ ${ICYQUE} -eq 1 ]; \
+RUN echo WHATSAPP=${WHATSAPP} > /tmp/status \
+ && if [ ${WHATSAPP} -eq 1 ]; \
      then cd /tmp \
-       && git clone -n https://github.com/EionRobb/icyque.git \
-       && cd icyque \
-       && git checkout ${ICYQUE_VERSION} \
+       && git clone -n https://github.com/hoehermann/purple-gowhatsapp.git \
+       && cd purple-gowhatsapp \
+       && git checkout ${WHATSAPP_VERSION} \
        && make \
        && make install \
-       && strip /usr/lib/purple-2/libicyque.so; \
+       && strip /usr/lib/purple-2/libgowhatsapp.so; \
      else mkdir -p /usr/lib/purple-2 \
-       && ln -sf /nowhere /usr/lib/purple-2/libicyque.so; \
+       && ln -sf /nowhere /usr/lib/purple-2/libgowhatsapp.so; \
     fi
 
 # ---
@@ -384,15 +382,15 @@ COPY --from=mastodon-build /usr/lib/bitlbee/mastodon.la /tmp/usr/lib/bitlbee/mas
 COPY --from=mastodon-build /usr/share/bitlbee/mastodon-help.txt /tmp/usr/share/bitlbee/mastodon-help.txt
 COPY --from=mastodon-build /tmp/status /tmp/plugin/mastodon
 
-COPY --from=matrix-build /usr/local/lib/libolm.so /tmp/usr/local/lib/libolm.so
+COPY --from=matrix-build /usr/local/lib/libolm.so.3.1.4 /tmp/usr/local/lib/libolm.so.3
 COPY --from=matrix-build /usr/lib/purple-2/libmatrix.so /tmp/usr/lib/purple-2/libmatrix.so
 COPY --from=matrix-build /tmp/status /tmp/plugin/matrix
 
 COPY --from=signald-build /usr/lib/purple-2/libsignald.so /tmp/usr/lib/purple-2/libsignald.so
 COPY --from=signald-build /tmp/status /tmp/plugin/signald
 
-COPY --from=icyque-build /usr/lib/purple-2/libicyque.so /tmp/usr/lib/purple-2/libicyque.so
-COPY --from=icyque-build /tmp/status /tmp/plugin/icyque
+COPY --from=whatsapp-build /usr/lib/purple-2/libgowhatsapp.so /tmp/usr/lib/purple-2/libgowhatsapp.so
+COPY --from=whatsapp-build /tmp/status /tmp/plugin/whatsapp
 
 RUN apk add --update --no-cache findutils \
  && find /tmp/ -type f -empty -delete \
@@ -415,15 +413,17 @@ RUN addgroup -g 101 -S bitlbee \
  && source /plugins \
  && if [ ${OTR} -eq 1 ]; then PKGS="${PKGS} libotr"; fi \
  && if [ ${FACEBOOK} -eq 1 ] || [ ${SKYPEWEB} -eq 1 ] || [ ${HANGOUTS} -eq 1 ] \
- || [ ${ROCKETCHAT} -eq 1 ] || [ ${MATRIX} -eq 1 ] || [ ${SIGNAL} -eq 1 ] \
- || [ ${ICYQUE} -eq 1 ]; then PKGS="${PKGS} json-glib"; fi \
+ || [ ${ROCKETCHAT} -eq 1 ] || [ ${MATRIX} -eq 1 ] || [ ${SIGNAL} -eq 1 ]; then PKGS="${PKGS} json-glib"; fi \
  && if [ ${STEAM} -eq 1 ] || [ ${TELEGRAM} -eq 1 ] || [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} libgcrypt"; fi \
  && if [ ${TELEGRAM} -eq 1 ]; then PKGS="${PKGS} zlib libwebp libpng"; fi \
- && if [ ${HANGOUTS} -eq 1 ] || [ ${SIGNAL} -eq 1 ]; then PKGS="${PKGS} protobuf-c"; fi \
+ && if [ ${HANGOUTS} -eq 1 ] || [ ${SIGNAL} -eq 1 ] || [ ${WHATSAPP} -eq 1 ]; then PKGS="${PKGS} protobuf-c"; fi \
  && if [ ${SIPE} -eq 1 ]; then PKGS="${PKGS} libxml2"; fi \
  && if [ ${ROCKETCHAT} -eq 1 ]; then PKGS="${PKGS} discount"; fi \
  && if [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} sqlite http-parser"; fi \
+ && PKGS="${PKGS} irssi" \
  && apk add --no-cache --update ${PKGS} \
+ && for PKG in ${PKGS}; do apk info -qL ${PKG} >> /files; done \
+ && for FILE in $(cat /files); do cp --parents ${FILE} /tmp/; done \
  && rm /plugins
 
 EXPOSE 6667
