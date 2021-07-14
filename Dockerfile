@@ -298,12 +298,13 @@ ARG SIGNAL_VERSION=v0.8.1
 RUN echo SIGNAL=${SIGNAL} > /tmp/status \
  && if [ ${SIGNAL} -eq 1 ]; \
      then cd /tmp \
+       && apk --no-cache add file-dev libmagic \
        && git clone -n https://github.com/hoehermann/libpurple-signald \
        && cd libpurple-signald \
        && git checkout ${SIGNAL_VERSION} \
        && git submodule init \
        && git submodule update \
-       && make \
+       && make SUPPORT_EXTERNAL_ATTACHMENTS=1 \
        && make install \
        && strip /usr/lib/purple-2/libsignald.so; \
      else mkdir -p /usr/lib/purple-2 \
@@ -420,6 +421,7 @@ RUN addgroup -g 101 -S bitlbee \
  && if [ ${STEAM} -eq 1 ] || [ ${TELEGRAM} -eq 1 ] || [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} libgcrypt"; fi \
  && if [ ${TELEGRAM} -eq 1 ]; then PKGS="${PKGS} zlib libwebp libpng"; fi \
  && if [ ${HANGOUTS} -eq 1 ] || [ ${SIGNAL} -eq 1 ]; then PKGS="${PKGS} protobuf-c"; fi \
+ && if [ ${SIGNAL} -eq 1 ]; then PKGS="${PKGS} libmagic"; fi \
  && if [ ${SIPE} -eq 1 ]; then PKGS="${PKGS} libxml2"; fi \
  && if [ ${ROCKETCHAT} -eq 1 ]; then PKGS="${PKGS} discount"; fi \
  && if [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} sqlite http-parser"; fi \
