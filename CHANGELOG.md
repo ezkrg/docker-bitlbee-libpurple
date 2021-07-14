@@ -1,5 +1,8 @@
 # Changelog
 
+## 2021-07-13 23:38:45 ([mooomooo](https://github.com/mooomooo))
+- add flag and deps to enable attachment handling for Signal plugin
+
 ## 2021-06-11 19:23:13
 - update hangouts
 - update slack
