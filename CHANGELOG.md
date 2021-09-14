@@ -1,5 +1,8 @@
 # Changelog
 
+## 2021-09-14 22:52:43 ([markrawls](https://github.com/markrawls))
+- build for ARM platforms
+
 ## 2021-07-13 23:38:45 ([mooomooo](https://github.com/mooomooo))
 - add flag and deps to enable attachment handling for Signal plugin
 
