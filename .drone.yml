@@ -23,8 +23,7 @@ steps:
     - docker run --rm --privileged tonistiigi/binfmt --install all
     - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
-    - docker buildx build --load --cache-from ezkrg/cache:bitlbee-libpurple --cache-to ezkrg/cache:bitlbee-libpurple -t ezkrg/bitlbee-libpurple:test . --platform linux/amd64,linux/arm64,linux/armhf
-    - docker push ezkrg/bitlbee-libpurple:test
+    - docker buildx build --push --cache-from ezkrg/cache:bitlbee-libpurple --cache-to ezkrg/cache:bitlbee-libpurple -t ezkrg/bitlbee-libpurple:test --platform linux/amd64,linux/arm64,linux/armhf .
 
   - name: release
     image: docker:stable
@@ -72,6 +71,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 2b1020296cc1bcfc25ebeeea7805cc45930ed420bbcf9cf08477d19b6f17da9c
+hmac: 35cdb2c0899b5887403646d9199e6ca73845023060149a38cee80afa7d1a9548
 
 ...
