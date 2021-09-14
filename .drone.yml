@@ -72,6 +72,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 6d34136b0fc3ae4a1c12e759c5eb553b3be864760bf1efd26c3b2b00b711229a
+hmac: b7f84f2e499127f57f55627940bffd7bf2c420aaf4fcb80b757d65940209580c
 
 ...
