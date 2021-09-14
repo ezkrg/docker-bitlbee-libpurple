@@ -20,9 +20,10 @@ steps:
       DOCKER_HOST: tcp://docker:2375
     commands:
     - sleep 5
-    - docker buildx create --use --name docker --node docker --platform linux/amd64 --driver docker-container $DOCKER_HOST
+    - docker run -it --rm --privileged tonistiigi/binfmt --install all
+    - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
-    - docker buildx build --load --cache-from ezkrg/cache:bitlbee-libpurple --cache-to ezkrg/cache:bitlbee-libpurple -t ezkrg/bitlbee-libpurple:test .
+    - docker buildx build --load --cache-from ezkrg/cache:bitlbee-libpurple --cache-to ezkrg/cache:bitlbee-libpurple -t ezkrg/bitlbee-libpurple:test . --platform linux/amd64,linux/arm64,linux/armhf
     - docker push ezkrg/bitlbee-libpurple:test
 
   - name: release
@@ -44,7 +45,7 @@ steps:
       - tag
 
 ---
-kind: pipeline 
+kind: pipeline
 type: docker
 name: notification
 
