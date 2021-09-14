@@ -20,7 +20,7 @@ steps:
       DOCKER_HOST: tcp://docker:2375
     commands:
     - sleep 5
-    - docker run -it --rm --privileged tonistiigi/binfmt --install all
+    - docker run --rm --privileged tonistiigi/binfmt --install all
     - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
     - docker buildx build --load --cache-from ezkrg/cache:bitlbee-libpurple --cache-to ezkrg/cache:bitlbee-libpurple -t ezkrg/bitlbee-libpurple:test . --platform linux/amd64,linux/arm64,linux/armhf
@@ -72,6 +72,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: b7f84f2e499127f57f55627940bffd7bf2c420aaf4fcb80b757d65940209580c
+hmac: 2b1020296cc1bcfc25ebeeea7805cc45930ed420bbcf9cf08477d19b6f17da9c
 
 ...
