@@ -265,7 +265,7 @@ FROM bitlbee-build as matrix-build
 
 ARG MATRIX=1
 ARG OLM_VERSION=3.2.4
-ARG MATRIX_VERSION=2fcd5b8
+ARG MATRIX_VERSION=88f9558
 
 RUN echo MATRIX=${MATRIX} > /tmp/status \
  && if [ ${MATRIX} -eq 1 ]; \
@@ -385,7 +385,7 @@ COPY --from=mastodon-build /usr/lib/bitlbee/mastodon.la /tmp/usr/lib/bitlbee/mas
 COPY --from=mastodon-build /usr/share/bitlbee/mastodon-help.txt /tmp/usr/share/bitlbee/mastodon-help.txt
 COPY --from=mastodon-build /tmp/status /tmp/plugin/mastodon
 
-COPY --from=matrix-build /usr/local/lib/libolm.so /tmp/usr/local/lib/libolm.so
+COPY --from=matrix-build /usr/local/lib/libolm.so /tmp/usr/local/lib/libolm.so.3
 COPY --from=matrix-build /usr/lib/purple-2/libmatrix.so /tmp/usr/lib/purple-2/libmatrix.so
 COPY --from=matrix-build /tmp/status /tmp/plugin/matrix
 
