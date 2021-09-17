@@ -267,6 +267,8 @@ ARG MATRIX=1
 ARG OLM_VERSION=3.2.4
 ARG MATRIX_VERSION=88f9558
 
+COPY matrix-e2e.c.patch /tmp/matrix-e2e.c.patch
+
 RUN echo MATRIX=${MATRIX} > /tmp/status \
  && if [ ${MATRIX} -eq 1 ]; \
      then cd /tmp \
@@ -280,6 +282,7 @@ RUN echo MATRIX=${MATRIX} > /tmp/status \
        && git clone -n https://github.com/matrix-org/purple-matrix \
        && cd purple-matrix \
        && git checkout ${MATRIX_VERSION} \
+       && if [ $(uname -m) == "armv7l" ]; then patch < ../matrix-e2e.c.patch; fi \
        && make \
        && make install \
        && strip /usr/lib/purple-2/libmatrix.so; \
