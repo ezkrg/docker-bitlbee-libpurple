@@ -20,10 +20,10 @@ steps:
       DOCKER_HOST: tcp://docker:2375
     commands:
     - sleep 5
-    - docker buildx create --use --name docker --node docker --platform linux/amd64 --driver docker-container $DOCKER_HOST
+    - docker run -it --rm --privileged tonistiigi/binfmt --install all
+    - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
-    - docker buildx build --load --cache-from ezkrg/cache:bitlbee-libpurple --cache-to ezkrg/cache:bitlbee-libpurple -t ezkrg/bitlbee-libpurple:test --platform linux/amd64 .
-    - docker push ezkrg/bitlbee-libpurple:test
+    - docker buildx build --push --cache-from ezkrg/cache:bitlbee-libpurple --cache-to ezkrg/cache:bitlbee-libpurple -t ezkrg/bitlbee-libpurple:dev --platform linux/amd64,linux/arm64,linux/armhf .
 
   - name: release
     image: docker:stable
@@ -35,6 +35,7 @@ steps:
       DOCKER_HOST: tcp://docker:2375
     commands:
     - echo $PASSWORD | docker login --username $USER --password-stdin
+    - docker pull ezkrg/bitlbee-libpurple:test
     - docker tag ezkrg/bitlbee-libpurple:test ezkrg/bitlbee-libpurple:$DRONE_TAG
     - docker push ezkrg/bitlbee-libpurple:$DRONE_TAG
     - docker tag ezkrg/bitlbee-libpurple:test ezkrg/bitlbee-libpurple:latest
@@ -44,7 +45,7 @@ steps:
       - tag
 
 ---
-kind: pipeline
+kind: pipeline 
 type: docker
 name: notification
 
@@ -71,6 +72,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 9c778c50b9cb687fe3e1614048c082db18c4fe6f531aba5c04f0ec950a2814d1
+hmac: 713b5ce1053fe1bd2320eaa28ca0df5784f806d69a730634eddf3c14d08697f7
 
 ...
