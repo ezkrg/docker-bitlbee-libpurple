@@ -6,8 +6,8 @@ ARG BITLBEE_VERSION=3.6
 
 RUN apk add --no-cache --update \
     bash shadow build-base git python2 autoconf automake libtool mercurial intltool flex \
-    glib-dev openssl-dev pidgin-dev json-glib-dev libgcrypt-dev zlib-dev libwebp-dev \
-    libpng-dev protobuf-c-dev libxml2-dev discount-dev sqlite-dev http-parser-dev libotr-dev \
+    glib-dev openssl-dev pidgin-dev json-glib-dev libgcrypt-dev zlib-dev libwebp-dev libpng-dev \
+    protobuf-c-dev libxml2-dev discount-dev sqlite-dev http-parser-dev libotr-dev olm-dev \
  && cd /tmp \
  && git clone -n https://github.com/bitlbee/bitlbee.git \
  && cd bitlbee \
@@ -264,7 +264,6 @@ RUN echo MASTODON=${MASTODON} > /tmp/status \
 FROM bitlbee-build as matrix-build
 
 ARG MATRIX=1
-ARG OLM_VERSION=3.2.4
 ARG MATRIX_VERSION=88f9558
 
 COPY matrix-e2e.c.patch /tmp/matrix-e2e.c.patch
@@ -272,13 +271,6 @@ COPY matrix-e2e.c.patch /tmp/matrix-e2e.c.patch
 RUN echo MATRIX=${MATRIX} > /tmp/status \
  && if [ ${MATRIX} -eq 1 ]; \
      then cd /tmp \
-       && git clone -n https://gitlab.matrix.org/matrix-org/olm.git \
-       && cd olm \
-       && git checkout ${OLM_VERSION} \
-       && make \
-       && make install \
-       && strip /usr/local/lib/libolm.so.${OLM_VERSION} \
-       && cd /tmp \
        && git clone -n https://github.com/matrix-org/purple-matrix \
        && cd purple-matrix \
        && git checkout ${MATRIX_VERSION} \
@@ -287,7 +279,6 @@ RUN echo MATRIX=${MATRIX} > /tmp/status \
        && make install \
        && strip /usr/lib/purple-2/libmatrix.so; \
      else mkdir -p /usr/lib/purple-2 \
-       && ln -sf /nowhere /usr/local/lib/libolm.so \
        && ln -sf /nowhere /usr/lib/purple-2/libmatrix.so; \
     fi
 
@@ -388,7 +379,6 @@ COPY --from=mastodon-build /usr/lib/bitlbee/mastodon.la /tmp/usr/lib/bitlbee/mas
 COPY --from=mastodon-build /usr/share/bitlbee/mastodon-help.txt /tmp/usr/share/bitlbee/mastodon-help.txt
 COPY --from=mastodon-build /tmp/status /tmp/plugin/mastodon
 
-COPY --from=matrix-build /usr/local/lib/libolm.so /tmp/usr/local/lib/libolm.so.3
 COPY --from=matrix-build /usr/lib/purple-2/libmatrix.so /tmp/usr/lib/purple-2/libmatrix.so
 COPY --from=matrix-build /tmp/status /tmp/plugin/matrix
 
@@ -427,7 +417,7 @@ RUN addgroup -g 101 -S bitlbee \
  && if [ ${SIGNAL} -eq 1 ]; then PKGS="${PKGS} libmagic"; fi \
  && if [ ${SIPE} -eq 1 ]; then PKGS="${PKGS} libxml2"; fi \
  && if [ ${ROCKETCHAT} -eq 1 ]; then PKGS="${PKGS} discount"; fi \
- && if [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} sqlite http-parser"; fi \
+ && if [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} sqlite http-parser olm"; fi \
  && apk add --no-cache --update ${PKGS} \
  && rm /plugins
 
