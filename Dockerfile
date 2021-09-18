@@ -327,6 +327,27 @@ RUN echo ICYQUE=${ICYQUE} > /tmp/status \
 
 # ---
 
+FROM bitlbee-build as whatsapp-build
+
+ARG WHATSAPP=1
+ARG WHATSAPP_VERSION=438fae6
+
+RUN echo WHATSAPP=${WHATSAPP} > /tmp/status \
+ && if [ ${WHATSAPP} -eq 1 ]; \
+     then cd /tmp \
+       && apk add --update --no-cache go \
+       && git clone -n https://github.com/hoehermann/purple-gowhatsapp.git \
+       && cd purple-gowhatsapp \
+       && git checkout ${WHATSAPP_VERSION} \
+       && make \
+       && make install \
+       && strip /usr/lib/purple-2/libgowhatsapp.so; \
+     else mkdir -p /usr/lib/purple-2 \
+       && ln -sf /nowhere /usr/lib/purple-2/libgowhatsapp.so; \
+    fi
+
+# ---
+
 FROM alpine:${ALPINE_VERSION} as bitlbee-plugins
 
 COPY --from=bitlbee-build /usr/sbin/bitlbee /tmp/usr/sbin/bitlbee
@@ -387,6 +408,9 @@ COPY --from=signald-build /tmp/status /tmp/plugin/signald
 
 COPY --from=icyque-build /usr/lib/purple-2/libicyque.so /tmp/usr/lib/purple-2/libicyque.so
 COPY --from=icyque-build /tmp/status /tmp/plugin/icyque
+
+COPY --from=whatsapp-build /usr/lib/purple-2/libgowhatsapp.so /tmp/usr/lib/purple-2/libgowhatsapp.so
+COPY --from=whatsapp-build /tmp/status /tmp/plugin/whatsapp
 
 RUN apk add --update --no-cache findutils \
  && find /tmp/ -type f -empty -delete \
