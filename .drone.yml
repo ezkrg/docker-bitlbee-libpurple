@@ -78,6 +78,15 @@ steps:
       event:
       - tag
 
+---
+kind: pipeline 
+type: docker
+name: notification
+
+clone:
+  disable: true
+
+steps:
   - name: notification
     image: appleboy/drone-telegram:1.3.4
     failure: ignore
@@ -95,6 +104,9 @@ steps:
       status:
         - success
         - failure
+
+depends_on:
+  - docker
 
 ---
 kind: signature
