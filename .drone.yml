@@ -44,6 +44,40 @@ steps:
       event:
       - tag
 
+  - name: debian-test
+    image: ezkrg/buildx:latest
+    environment:
+      USER:
+        from_secret: DHU
+      PASSWORD:
+        from_secret: DHP
+      DOCKER_HOST: tcp://docker:2375
+    commands:
+    - sleep 5
+    - docker run --rm --privileged tonistiigi/binfmt --install all
+    - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
+    - echo $PASSWORD | docker login --username $USER --password-stdin
+    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:debian-cache --cache-to ezkrg/bitlbee-libpurple:debian-cache -t ezkrg/bitlbee-libpurple:debian-test --platform linux/amd64,linux/arm64,linux/armhf -f Dockerfile.debian .
+
+  - name: debian-release
+    image: docker:stable
+    environment:
+      USER:
+        from_secret: DHU
+      PASSWORD:
+        from_secret: DHP
+      DOCKER_HOST: tcp://docker:2375
+    commands:
+    - echo $PASSWORD | docker login --username $USER --password-stdin
+    - docker pull ezkrg/bitlbee-libpurple:debian-test
+    - docker tag ezkrg/bitlbee-libpurple:debian-test ezkrg/bitlbee-libpurple:debian-$DRONE_TAG
+    - docker push ezkrg/bitlbee-libpurple:debian-$DRONE_TAG
+    - docker tag ezkrg/bitlbee-libpurple:debian-test ezkrg/bitlbee-libpurple:debian-latest
+    - docker push ezkrg/bitlbee-libpurple:debian-latest
+    when:
+      event:
+      - tag
+
 ---
 kind: pipeline 
 type: docker
@@ -67,11 +101,8 @@ steps:
         [Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{duration build.started build.finished}}]({{build.link}}) {{#success build.status}}✅{{else}}❌{{/success}}  
         *Branch:* [{{commit.branch}}](https://github.com/{{repo.namespace}}/{{repo.name}}/commits/{{commit.branch}}) *Commit:* [{{commit.message}}]({{commit.link}})
 
-depends_on:
-  - docker
-
 ---
 kind: signature
-hmac: 4d16b8fe931c702b0383aaacf4b3dfb28c60b69577f65cd07981a9d1eedbb730
+hmac: 96a9cb6a778f2ba772a1e145cf60384d1104788eb868195de42b902fe0ca1103
 
 ...
