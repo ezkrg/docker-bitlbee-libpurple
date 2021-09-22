@@ -87,8 +87,8 @@ clone:
   disable: true
 
 steps:
-  - name: notification
-    image: appleboy/drone-telegram:1.3.4
+  - name: telegram
+    image: appleboy/drone-telegram:1.3.10
     failure: ignore
     settings:
       token:
@@ -98,18 +98,19 @@ steps:
       message: |
         *{{commit.author}} ({{commit.email}})*  
         *{{repo.namespace}}/{{repo.name}}*  
-        [Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{duration build.started build.finished}}]({{build.link}}) {{#success build.status}}✅{{else}}❌{{/success}}  
+        [Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{since build.started}}]({{build.link}}) {{#success build.status}}✅{{else}}❌{{/success}}  
         *Branch:* [{{commit.branch}}](https://github.com/{{repo.namespace}}/{{repo.name}}/commits/{{commit.branch}}) *Commit:* [{{commit.message}}]({{commit.link}})
-    when:
-      status:
-        - success
-        - failure
+
+trigger:
+  status:
+    - success
+    - failure
 
 depends_on:
   - docker
 
 ---
 kind: signature
-hmac: 7510d775f0f5a15c09e28e645dd8fa21151614749ce232922efc4188b98a5254
+hmac: 7f95adbdf58e186c107606f31f1f6d99d973672d4feda22c01b6b2cc8e68939d
 
 ...
