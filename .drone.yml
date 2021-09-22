@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: docker
-name: docker
+name: alpine
 
 steps:
   - name: docker
@@ -19,7 +19,7 @@ steps:
         from_secret: DHP
       DOCKER_HOST: tcp://docker:2375
     commands:
-    - sleep 5
+    - while ! docker info; do sleep 1; done
     - docker run --rm --privileged tonistiigi/binfmt --install all
     - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
@@ -44,7 +44,20 @@ steps:
       event:
       - tag
 
-  - name: debian-test
+---
+kind: pipeline
+type: docker
+name: debian
+
+steps:
+  - name: docker
+    image: docker:stable-dind
+    privileged: true
+    detach: true
+    command: [ "dockerd", "--host=tcp://0.0.0.0:2375" ]
+
+
+  - name: test
     image: ezkrg/buildx:latest
     environment:
       USER:
@@ -53,13 +66,13 @@ steps:
         from_secret: DHP
       DOCKER_HOST: tcp://docker:2375
     commands:
-    - sleep 5
+    - while ! docker info; do sleep 1; done
     - docker run --rm --privileged tonistiigi/binfmt --install all
     - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
     - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:debian-cache --cache-to ezkrg/bitlbee-libpurple:debian-cache -t ezkrg/bitlbee-libpurple:debian-test --platform linux/amd64,linux/arm64,linux/armhf -f Dockerfile.debian .
 
-  - name: debian-release
+  - name: release
     image: docker:stable
     environment:
       USER:
@@ -107,10 +120,11 @@ trigger:
     - failure
 
 depends_on:
-  - docker
+  - alpine
+  - debian
 
 ---
 kind: signature
-hmac: 7f95adbdf58e186c107606f31f1f6d99d973672d4feda22c01b6b2cc8e68939d
+hmac: 62c506a9cce77566ce1ff689c8bcf72fd235fd9d4d402e264257d57f4e909bc3
 
 ...
