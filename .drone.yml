@@ -24,9 +24,12 @@ steps:
     - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
     - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:cache --cache-to ezkrg/bitlbee-libpurple:cache -t ezkrg/bitlbee-libpurple:test --platform linux/amd64,linux/arm64,linux/armhf .
+    when:
+      event:
+      - push
 
-  - name: release
-    image: docker:stable
+  - name: latest
+    image: ezkrg/buildx:latest
     environment:
       USER:
         from_secret: DHU
@@ -34,12 +37,11 @@ steps:
         from_secret: DHP
       DOCKER_HOST: tcp://docker:2375
     commands:
+    - while ! docker info; do sleep 1; done
+    - docker run --rm --privileged tonistiigi/binfmt --install all
+    - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
-    - docker pull ezkrg/bitlbee-libpurple:test
-    - docker tag ezkrg/bitlbee-libpurple:test ezkrg/bitlbee-libpurple:$DRONE_TAG
-    - docker push ezkrg/bitlbee-libpurple:$DRONE_TAG
-    - docker tag ezkrg/bitlbee-libpurple:test ezkrg/bitlbee-libpurple:latest
-    - docker push ezkrg/bitlbee-libpurple:latest
+    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:cache --cache-to ezkrg/bitlbee-libpurple:cache -t ezkrg/bitlbee-libpurple:$DRONE_TAG -t ezkrg/bitlbee-libpurple:latest --platform linux/amd64,linux/arm64,linux/armhf .
     when:
       event:
       - tag
@@ -71,9 +73,12 @@ steps:
     - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
     - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:debian-cache --cache-to ezkrg/bitlbee-libpurple:debian-cache -t ezkrg/bitlbee-libpurple:debian-test --platform linux/amd64,linux/arm64,linux/armhf -f Dockerfile.debian .
+    when:
+      event:
+      - push
 
-  - name: release
-    image: docker:stable
+  - name: latest
+    image: ezkrg/buildx:latest
     environment:
       USER:
         from_secret: DHU
@@ -81,12 +86,11 @@ steps:
         from_secret: DHP
       DOCKER_HOST: tcp://docker:2375
     commands:
+    - while ! docker info; do sleep 1; done
+    - docker run --rm --privileged tonistiigi/binfmt --install all
+    - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
-    - docker pull ezkrg/bitlbee-libpurple:debian-test
-    - docker tag ezkrg/bitlbee-libpurple:debian-test ezkrg/bitlbee-libpurple:debian-$DRONE_TAG
-    - docker push ezkrg/bitlbee-libpurple:debian-$DRONE_TAG
-    - docker tag ezkrg/bitlbee-libpurple:debian-test ezkrg/bitlbee-libpurple:debian-latest
-    - docker push ezkrg/bitlbee-libpurple:debian-latest
+    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:debian-cache --cache-to ezkrg/bitlbee-libpurple:debian-cache -t ezkrg/bitlbee-libpurple:debian-$DRONE_TAG -t ezkrg/bitlbee-libpurple:debian-latest --platform linux/amd64,linux/arm64,linux/armhf -f Dockerfile.debian .
     when:
       event:
       - tag
@@ -125,6 +129,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 62c506a9cce77566ce1ff689c8bcf72fd235fd9d4d402e264257d57f4e909bc3
+hmac: e51bb8ccb6f602e0f02e6bd0e9dfd8456c4655c4bb299fc64a10c8b162294544
 
 ...
