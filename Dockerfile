@@ -1,6 +1,6 @@
-ARG ALPINE_VERSION=3.12
+FROM alpine:3.14 as base-image
 
-FROM alpine:${ALPINE_VERSION} as bitlbee-build
+FROM base-image as bitlbee-build
 
 ARG BITLBEE_VERSION=3.6
 
@@ -174,12 +174,17 @@ FROM bitlbee-build as sipe-build
 ARG SIPE=1
 ARG SIPE_VERSION=1.25.0
 
+COPY sipe-tls-tester.c.patch /tmp/sipe-tls-tester.c.patch
+COPY sipe-tls.c.patch /tmp/sipe-tls.c.patch
+
 RUN echo SIPE=${SIPE} > /tmp/status \
  && if [ ${SIPE} -eq 1 ]; \
      then cd /tmp \
        && git clone -n https://repo.or.cz/siplcs.git \
        && cd siplcs \
        && git checkout ${SIPE_VERSION} \
+       && patch -p0 < ../sipe-tls-tester.c.patch \
+       && patch -p0 < ../sipe-tls.c.patch \
        && ./autogen.sh \
        && ./configure --prefix=/usr \
        && make \
@@ -327,7 +332,7 @@ RUN echo ICYQUE=${ICYQUE} > /tmp/status \
 
 # ---
 
-FROM alpine:${ALPINE_VERSION} as bitlbee-plugins
+FROM base-image as bitlbee-plugins
 
 COPY --from=bitlbee-build /usr/sbin/bitlbee /tmp/usr/sbin/bitlbee
 COPY --from=bitlbee-build /usr/share/man/man8/bitlbee.8 /tmp/usr/share/man/man8/bitlbee.8
@@ -396,12 +401,12 @@ RUN apk add --update --no-cache findutils \
 
 # ---
 
-FROM alpine:${ALPINE_VERSION} as bitlbee-libpurple
+FROM base-image as bitlbee-libpurple
 
 COPY --from=bitlbee-plugins /tmp/ /
 
-ARG PKGS="tzdata bash glib libssl1.1 libpurple libpurple-xmpp \
-      libpurple-oscar libpurple-bonjour"
+ARG PKGS="tzdata bash glib libssl1.1 libpurple \
+          libpurple-xmpp libpurple-bonjour"
 
 RUN addgroup -g 101 -S bitlbee \
  && adduser -u 101 -D -S -G bitlbee bitlbee \
