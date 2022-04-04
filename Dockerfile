@@ -1,4 +1,4 @@
-FROM alpine:3.14 as base-image
+FROM alpine:3.15 as base-image
 
 FROM base-image as bitlbee-build
 
@@ -172,10 +172,7 @@ RUN echo SLACK=${SLACK} > /tmp/status \
 FROM bitlbee-build as sipe-build
 
 ARG SIPE=1
-ARG SIPE_VERSION=1.25.0
-
-COPY sipe-tls-tester.c.patch /tmp/sipe-tls-tester.c.patch
-COPY sipe-tls.c.patch /tmp/sipe-tls.c.patch
+ARG SIPE_VERSION=3db5111
 
 RUN echo SIPE=${SIPE} > /tmp/status \
  && if [ ${SIPE} -eq 1 ]; \
@@ -183,8 +180,6 @@ RUN echo SIPE=${SIPE} > /tmp/status \
        && git clone -n https://repo.or.cz/siplcs.git \
        && cd siplcs \
        && git checkout ${SIPE_VERSION} \
-       && patch -p0 < ../sipe-tls-tester.c.patch \
-       && patch -p0 < ../sipe-tls.c.patch \
        && ./autogen.sh \
        && ./configure --prefix=/usr \
        && make \
@@ -271,15 +266,12 @@ FROM bitlbee-build as matrix-build
 ARG MATRIX=1
 ARG MATRIX_VERSION=88f9558
 
-COPY matrix-e2e.c.patch /tmp/matrix-e2e.c.patch
-
 RUN echo MATRIX=${MATRIX} > /tmp/status \
  && if [ ${MATRIX} -eq 1 ]; \
      then cd /tmp \
        && git clone -n https://github.com/matrix-org/purple-matrix \
        && cd purple-matrix \
        && git checkout ${MATRIX_VERSION} \
-       && if [ $(uname -m) == "armv7l" ]; then patch < ../matrix-e2e.c.patch; fi \
        && make \
        && make install \
        && strip /usr/lib/purple-2/libmatrix.so; \

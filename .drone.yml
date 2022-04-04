@@ -21,9 +21,9 @@ steps:
     commands:
     - while ! docker info; do sleep 1; done
     - docker run --rm --privileged tonistiigi/binfmt --install all
-    - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
+    - docker buildx create --use --name docker --node docker --platform linux/amd64 --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
-    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:cache --cache-to ezkrg/bitlbee-libpurple:cache -t ezkrg/bitlbee-libpurple:test --platform linux/amd64,linux/arm64,linux/armhf .
+    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:cache --cache-to ezkrg/bitlbee-libpurple:cache -t ezkrg/bitlbee-libpurple:test --platform linux/amd64 .
     when:
       event:
       - push
@@ -39,9 +39,9 @@ steps:
     commands:
     - while ! docker info; do sleep 1; done
     - docker run --rm --privileged tonistiigi/binfmt --install all
-    - docker buildx create --use --name docker --node docker --platform linux/amd64,linux/arm64,linux/armhf --driver docker-container $DOCKER_HOST
+    - docker buildx create --use --name docker --node docker --platform linux/amd64--driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
-    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:cache --cache-to ezkrg/bitlbee-libpurple:cache -t ezkrg/bitlbee-libpurple:$DRONE_TAG -t ezkrg/bitlbee-libpurple:latest --platform linux/amd64,linux/arm64,linux/armhf .
+    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:cache --cache-to ezkrg/bitlbee-libpurple:cache -t ezkrg/bitlbee-libpurple:$DRONE_TAG -t ezkrg/bitlbee-libpurple:latest --platform linux/amd64 .
     when:
       event:
       - tag
@@ -129,6 +129,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: e51bb8ccb6f602e0f02e6bd0e9dfd8456c4655c4bb299fc64a10c8b162294544
+hmac: d6be935aac30edc801babe2b7daae15dc913d2751da9f43696fbb8eece1a05d7
 
 ...
