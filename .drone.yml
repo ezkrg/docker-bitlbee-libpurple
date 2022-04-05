@@ -20,7 +20,6 @@ steps:
       DOCKER_HOST: tcp://docker:2375
     commands:
     - while ! docker info; do sleep 1; done
-    - docker run --rm --privileged tonistiigi/binfmt --install all
     - docker buildx create --use --name docker --node docker --platform linux/amd64 --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
     - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:cache --cache-to ezkrg/bitlbee-libpurple:cache -t ezkrg/bitlbee-libpurple:test --platform linux/amd64 .
@@ -38,7 +37,6 @@ steps:
       DOCKER_HOST: tcp://docker:2375
     commands:
     - while ! docker info; do sleep 1; done
-    - docker run --rm --privileged tonistiigi/binfmt --install all
     - docker buildx create --use --name docker --node docker --platform linux/amd64--driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
     - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:cache --cache-to ezkrg/bitlbee-libpurple:cache -t ezkrg/bitlbee-libpurple:$DRONE_TAG -t ezkrg/bitlbee-libpurple:latest --platform linux/amd64 .
