@@ -2,7 +2,7 @@ FROM alpine:3.15 as base-image
 
 FROM base-image as bitlbee-build
 
-ARG BITLBEE_VERSION=3.6
+ARG BITLBEE_VERSION
 
 RUN apk add --no-cache --update \
     bash shadow build-base git python2 autoconf automake libtool mercurial intltool flex \
@@ -40,7 +40,7 @@ RUN echo OTR=${OTR} > /tmp/status \
 FROM bitlbee-build as facebook-build
 
 ARG FACEBOOK=1
-ARG FACEBOOK_VERSION=v1.2.2
+ARG FACEBOOK_VERSION
 
 RUN echo FACEBOOK=${FACEBOOK} > /tmp/status \
  && if [ ${FACEBOOK} -eq 1 ]; \
@@ -62,7 +62,7 @@ RUN echo FACEBOOK=${FACEBOOK} > /tmp/status \
 FROM bitlbee-build as steam-build
 
 ARG STEAM=1
-ARG STEAM_VERSION=a6444d2
+ARG STEAM_VERSION
 
 RUN echo STEAM=${STEAM} > /tmp/status \
  && if [ ${STEAM} -eq 1 ]; \
@@ -84,7 +84,7 @@ RUN echo STEAM=${STEAM} > /tmp/status \
 FROM bitlbee-build as skypeweb-build
 
 ARG SKYPEWEB=1
-ARG SKYPEWEB_VERSION=c4906b8
+ARG SKYPEWEB_VERSION
 
 RUN echo SKYPEWEB=${SKYPEWEB} > /tmp/status \
  && if [ ${SKYPEWEB} -eq 1 ]; \
@@ -105,7 +105,7 @@ RUN echo SKYPEWEB=${SKYPEWEB} > /tmp/status \
 FROM bitlbee-build as telegram-build
 
 ARG TELEGRAM=1
-ARG TELEGRAM_VERSION=v1.4.3
+ARG TELEGRAM_VERSION
 
 RUN echo TELEGRAM=${TELEGRAM} > /tmp/status \
  && if [ ${TELEGRAM} -eq 1 ]; \
@@ -129,7 +129,7 @@ RUN echo TELEGRAM=${TELEGRAM} > /tmp/status \
 FROM bitlbee-build as hangouts-build
 
 ARG HANGOUTS=1
-ARG HANGOUTS_VERSION=e8c8088
+ARG HANGOUTS_VERSION
 
 RUN echo HANGOUTS=${HANGOUTS} > /tmp/status \
  && if [ ${HANGOUTS} -eq 1 ]; \
@@ -149,7 +149,7 @@ RUN echo HANGOUTS=${HANGOUTS} > /tmp/status \
 FROM bitlbee-build as slack-build
 
 ARG SLACK=1
-ARG SLACK_VERSION=e0c73ae
+ARG SLACK_VERSION
 
 SHELL [ "/bin/bash", "-c" ]
 
@@ -172,7 +172,7 @@ RUN echo SLACK=${SLACK} > /tmp/status \
 FROM bitlbee-build as sipe-build
 
 ARG SIPE=1
-ARG SIPE_VERSION=3db5111
+ARG SIPE_VERSION
 
 RUN echo SIPE=${SIPE} > /tmp/status \
  && if [ ${SIPE} -eq 1 ]; \
@@ -196,7 +196,7 @@ RUN echo SIPE=${SIPE} > /tmp/status \
 FROM bitlbee-build as discord-build
 
 ARG DISCORD=1
-ARG DISCORD_VERSION=0.4.3
+ARG DISCORD_VERSION
 
 RUN echo DISCORD=${DISCORD} > /tmp/status \
  && if [ ${DISCORD} -eq 1 ]; \
@@ -220,7 +220,7 @@ RUN echo DISCORD=${DISCORD} > /tmp/status \
 FROM bitlbee-build as rocketchat-build
 
 ARG ROCKETCHAT=1
-ARG ROCKETCHAT_VERSION=62090bc
+ARG ROCKETCHAT_VERSION
 
 RUN echo ROCKETCHAT=${ROCKETCHAT} > /tmp/status \
  && if [ ${ROCKETCHAT} -eq 1 ]; \
@@ -240,7 +240,7 @@ RUN echo ROCKETCHAT=${ROCKETCHAT} > /tmp/status \
 FROM bitlbee-build as mastodon-build
 
 ARG MASTODON=1
-ARG MASTODON_VERSION=v1.4.4
+ARG MASTODON_VERSION
 
 RUN echo MASTODON=${MASTODON} > /tmp/status \
  && if [ ${MASTODON} -eq 1 ]; \
@@ -264,7 +264,7 @@ RUN echo MASTODON=${MASTODON} > /tmp/status \
 FROM bitlbee-build as matrix-build
 
 ARG MATRIX=1
-ARG MATRIX_VERSION=88f9558
+ARG MATRIX_VERSION
 
 RUN echo MATRIX=${MATRIX} > /tmp/status \
  && if [ ${MATRIX} -eq 1 ]; \
@@ -284,7 +284,7 @@ RUN echo MATRIX=${MATRIX} > /tmp/status \
 FROM bitlbee-build as signald-build
 
 ARG SIGNAL=1
-ARG SIGNAL_VERSION=v0.8.1
+ARG SIGNAL_VERSION
 
 RUN echo SIGNAL=${SIGNAL} > /tmp/status \
  && if [ ${SIGNAL} -eq 1 ]; \
@@ -307,7 +307,7 @@ RUN echo SIGNAL=${SIGNAL} > /tmp/status \
 FROM bitlbee-build as icyque-build
 
 ARG ICYQUE=1
-ARG ICYQUE_VERSION=4fc08a0
+ARG ICYQUE_VERSION
 
 RUN echo ICYQUE=${ICYQUE} > /tmp/status \
  && if [ ${ICYQUE} -eq 1 ]; \
