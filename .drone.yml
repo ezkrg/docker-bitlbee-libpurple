@@ -5,7 +5,7 @@ name: alpine
 
 steps:
   - name: docker
-    image: docker:stable-dind
+    image: docker:dind
     privileged: true
     detach: true
     command: [ "dockerd", "--host=tcp://0.0.0.0:2375" ]
@@ -53,7 +53,7 @@ name: debian
 
 steps:
   - name: docker
-    image: docker:stable-dind
+    image: docker:dind
     privileged: true
     detach: true
     command: [ "dockerd", "--host=tcp://0.0.0.0:2375" ]
