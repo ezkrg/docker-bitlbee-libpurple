@@ -348,16 +348,21 @@ ARG WHATSAPP_VERSION
 RUN echo WHATSAPP=${WHATSAPP} > /tmp/status \
  && if [ ${WHATSAPP} -eq 1 ]; \
      then cd /tmp \
+       && echo "deb http://deb.debian.org/debian bullseye-backports main" | tee -a /etc/apt/sources.list \
        && apt-get update \
-       && apt-get install -y --no-install-recommends golang-go \
+       && apt-get install -y --no-install-recommends -t bullseye-backports golang-go \
+       && apt-get install -y --no-install-recommends cmake pkg-config \
        && git clone -n https://github.com/hoehermann/purple-gowhatsapp.git \
        && cd purple-gowhatsapp \
        && git checkout ${WHATSAPP_VERSION} \
-       && make \
-       && make install \
-       && strip /usr/lib/purple-2/libgowhatsapp.so; \
+       && mkdir build \
+       && cd build \
+       && cmake .. \
+       && cmake --build . \
+       && make install/strip \
+       && strip /usr/lib/purple-2/libwhatsmeow.so; \
      else mkdir -p /usr/lib/purple-2 \
-       && ln -sf /nowhere /usr/lib/purple-2/libgowhatsapp.so; \
+       && ln -sf /nowhere /usr/lib/purple-2/libwhatsmeow.so; \
     fi
 
 # ---
@@ -423,7 +428,7 @@ COPY --from=signald-build /tmp/status /tmp/plugin/signald
 COPY --from=icyque-build /usr/lib/purple-2/libicyque.so /tmp/usr/lib/purple-2/libicyque.so
 COPY --from=icyque-build /tmp/status /tmp/plugin/icyque
 
-COPY --from=whatsapp-build /usr/lib/purple-2/libgowhatsapp.so /tmp/usr/lib/purple-2/libgowhatsapp.so
+COPY --from=whatsapp-build /usr/lib/purple-2/libwhatsmeow.so /tmp/usr/lib/purple-2/libwhatsmeow.so
 COPY --from=whatsapp-build /tmp/status /tmp/plugin/whatsapp
 
 RUN apt-get update \
