@@ -300,16 +300,19 @@ FROM bitlbee-build as signald-build
 ARG SIGNAL=1
 ARG SIGNAL_VERSION
 
+COPY signal-login.c.patch /tmp/login.c.patch
+
 RUN echo SIGNAL=${SIGNAL} > /tmp/status \
  && if [ ${SIGNAL} -eq 1 ]; \
      then cd /tmp \
-       && apk --no-cache add file-dev libmagic \
+       && apk --no-cache add file-dev libmagic patch \
        && git clone -n https://github.com/hoehermann/libpurple-signald \
        && cd libpurple-signald \
        && git checkout ${SIGNAL_VERSION} \
        && git submodule init \
        && git submodule update \
-       && make -j$(nproc --ignore 2) SUPPORT_EXTERNAL_ATTACHMENTS=1 \
+       && patch < ../login.c.patch \
+       && make -j$(nproc --ignore 2) SUPPORT_EXTERNAL_ATTACHMENTS=1 libsignald.so \
        && make install \
        && strip /usr/lib/purple-2/libsignald.so; \
      else mkdir -p /usr/lib/purple-2 \

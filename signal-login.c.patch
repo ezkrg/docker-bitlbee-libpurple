@@ -1,0 +1,10 @@
+--- login.c
++++ login.c.new
+@@ -4,6 +4,7 @@
+ #include <sys/un.h> // for sockaddr_un
+ #include <sys/socket.h> // for socket and read
+ #include <errno.h>
++#include <stdint.h>
+
+ /*
+  * Implements the read callback.
