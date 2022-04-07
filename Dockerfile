@@ -13,7 +13,7 @@ RUN apk add --no-cache --update \
  && cd bitlbee \
  && git checkout ${BITLBEE_VERSION} \
  && ./configure --purple=1 --otr=plugin --ssl=openssl --prefix=/usr --etcdir=/etc/bitlbee \
- && make \
+ && make -j$(nproc --ignore 2) \
  && make install-bin \
  && make install-doc \
  && make install-dev \
@@ -49,7 +49,7 @@ RUN echo FACEBOOK=${FACEBOOK} > /tmp/status \
        && cd bitlbee-facebook \
        && git checkout ${FACEBOOK_VERSION} \
        && ./autogen.sh \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/bitlbee/facebook.so; \
      else mkdir -p /usr/lib/bitlbee \
@@ -71,7 +71,7 @@ RUN echo STEAM=${STEAM} > /tmp/status \
        && cd bitlbee-steam \
        && git checkout ${STEAM_VERSION} \
        && ./autogen.sh \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/bitlbee/steam.so; \
      else mkdir -p /usr/lib/bitlbee \
@@ -93,7 +93,7 @@ RUN echo SKYPEWEB=${SKYPEWEB} > /tmp/status \
        && cd skype4pidgin \
        && git checkout ${SKYPEWEB_VERSION} \
        && cd skypeweb \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/purple-2/libskypeweb.so; \
      else mkdir -p /usr/lib/purple-2 \
@@ -123,13 +123,13 @@ RUN echo TELEGRAM=${TELEGRAM} > /tmp/status \
        && mkdir build \
        && cd build \
        && cmake -DCMAKE_BUILD_TYPE=Release .. \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && cd /tmp/tdlib-purple \
        && mkdir build \
        && cd build \
        && cmake -DTd_DIR=/usr/local/lib/cmake/Td -DNoLottie=True -DNoVoip=True .. \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/purple-2/libtelegram-tdlib.so; \
      else mkdir -p /usr/lib/purple-2 \
@@ -151,7 +151,7 @@ RUN echo HANGOUTS=${HANGOUTS} > /tmp/status \
        && git clone -n https://github.com/EionRobb/purple-hangouts.git \
        && cd purple-hangouts \
        && git checkout ${HANGOUTS_VERSION} \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/purple-2/libhangouts.so; \
      else mkdir -p /usr/lib/purple-2 \
@@ -173,7 +173,7 @@ RUN echo SLACK=${SLACK} > /tmp/status \
        && git clone -n https://github.com/dylex/slack-libpurple.git \
        && cd slack-libpurple \
        && git checkout ${SLACK_VERSION} \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && install -d /usr/share/pixmaps/pidgin/protocols/{16,22,48} \
        && make install \
        && strip /usr/lib/purple-2/libslack.so; \
@@ -196,7 +196,7 @@ RUN echo SIPE=${SIPE} > /tmp/status \
        && git checkout ${SIPE_VERSION} \
        && ./autogen.sh \
        && ./configure --prefix=/usr \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/purple-2/libsipe.so; \
      else mkdir -p /usr/lib/purple-2 \
@@ -220,7 +220,7 @@ RUN echo DISCORD=${DISCORD} > /tmp/status \
        && git checkout ${DISCORD_VERSION} \
        && ./autogen.sh \
        && ./configure --prefix=/usr \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/bitlbee/discord.so; \
      else mkdir -p /usr/lib/bitlbee \
@@ -242,7 +242,7 @@ RUN echo ROCKETCHAT=${ROCKETCHAT} > /tmp/status \
        && git clone -n https://github.com/EionRobb/purple-rocketchat.git \
        && cd purple-rocketchat \
        && git checkout ${ROCKETCHAT_VERSION} \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/purple-2/librocketchat.so; \
      else mkdir -p /usr/lib/purple-2 \
@@ -264,7 +264,7 @@ RUN echo MASTODON=${MASTODON} > /tmp/status \
        && git checkout ${MASTODON_VERSION} \
        && sh ./autogen.sh \
        && ./configure \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/bitlbee/mastodon.so; \
      else mkdir -p /usr/lib/bitlbee \
@@ -286,7 +286,7 @@ RUN echo MATRIX=${MATRIX} > /tmp/status \
        && git clone -n https://github.com/matrix-org/purple-matrix \
        && cd purple-matrix \
        && git checkout ${MATRIX_VERSION} \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/purple-2/libmatrix.so; \
      else mkdir -p /usr/lib/purple-2 \
@@ -309,7 +309,7 @@ RUN echo SIGNAL=${SIGNAL} > /tmp/status \
        && git checkout ${SIGNAL_VERSION} \
        && git submodule init \
        && git submodule update \
-       && make SUPPORT_EXTERNAL_ATTACHMENTS=1 \
+       && make -j$(nproc --ignore 2) SUPPORT_EXTERNAL_ATTACHMENTS=1 \
        && make install \
        && strip /usr/lib/purple-2/libsignald.so; \
      else mkdir -p /usr/lib/purple-2 \
@@ -329,7 +329,7 @@ RUN echo ICYQUE=${ICYQUE} > /tmp/status \
        && git clone -n https://github.com/EionRobb/icyque.git \
        && cd icyque \
        && git checkout ${ICYQUE_VERSION} \
-       && make \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/purple-2/libicyque.so; \
      else mkdir -p /usr/lib/purple-2 \
