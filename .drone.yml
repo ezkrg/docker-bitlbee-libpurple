@@ -39,7 +39,7 @@ steps:
       DOCKER_HOST: tcp://docker:2375
     commands:
     - while ! docker info; do sleep 1; done
-    - docker buildx create --use --name docker --node docker --platform linux/amd64--driver docker-container $DOCKER_HOST
+    - docker buildx create --use --name docker --node docker --platform linux/amd64 --driver docker-container $DOCKER_HOST
     - echo $PASSWORD | docker login --username $USER --password-stdin
     - apk add --update --no-cache bash
     - BUILD_ARGS=$(for BUILD_ARG in $(cat plugin_versions); do echo -n "--build-arg $BUILD_ARG "; done)
@@ -135,6 +135,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: e0882d0997cb22942e951216e97d9ac96eed4810191ebd0bbcb8781912428000
+hmac: 4af294c1da51bd98b31d3c7cec96e571fd054461c406feddfe900be889a3594b
 
 ...
