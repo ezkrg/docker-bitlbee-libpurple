@@ -110,17 +110,31 @@ ARG TELEGRAM_VERSION
 RUN echo TELEGRAM=${TELEGRAM} > /tmp/status \
  && if [ ${TELEGRAM} -eq 1 ]; \
      then cd /tmp \
-       && git clone -n https://github.com/majn/telegram-purple \
-       && cd telegram-purple \
+       && apk add --update --no-cache cmake gperf \
+       && git clone -n https://github.com/ars3niy/tdlib-purple.git \
+       && cd tdlib-purple \
        && git checkout ${TELEGRAM_VERSION} \
-       && git submodule update --init --recursive \
-       && ./configure \
+       && TDLIB_REQ_VERSION=$(grep -o "tdlib version.*" CMakeLists.txt| tail -1 | awk '{print $3}') \
+       && cd /tmp \
+       && git clone -n https://github.com/tdlib/td.git tdlib \
+       && cd tdlib \
+       && TDLIB_VERSION=$(git log --pretty=format:"%h%x09%s" | grep "Update version to ${TDLIB_REQ_VERSION}" | awk '{print $1}') \
+       && git checkout ${TDLIB_VERSION} \
+       && mkdir build \
+       && cd build \
+       && cmake -DCMAKE_BUILD_TYPE=Release .. \
        && make \
        && make install \
-       && strip /usr/lib/purple-2/telegram-purple.so; \
+       && cd /tmp/tdlib-purple \
+       && mkdir build \
+       && cd build \
+       && cmake -DTd_DIR=/usr/local/lib/cmake/Td -DNoLottie=True -DNoVoip=True .. \
+       && make \
+       && make install \
+       && strip /usr/lib/purple-2/libtelegram-tdlib.so; \
      else mkdir -p /usr/lib/purple-2 \
-       && ln -sf /nowhere /usr/lib/purple-2/telegram-purple.so \
-       && ln -sf /nowhere /etc/telegram-purple \
+       && ln -sf /nowhere /usr/lib/purple-2/libtelegram-tdlib.so \
+       && ln -sf /nowhere /usr/local/share/metainfo/tdlib-purple.metainfo.xml \
        && ln -sf /nowhere /usr/local/share/locale; \
     fi
 
@@ -347,8 +361,8 @@ COPY --from=steam-build /tmp/status /tmp/plugin/steam
 COPY --from=skypeweb-build /usr/lib/purple-2/libskypeweb.so /tmp/usr/lib/purple-2/libskypeweb.so
 COPY --from=skypeweb-build /tmp/status /tmp/plugin/skypeweb
 
-COPY --from=telegram-build /usr/lib/purple-2/telegram-purple.so /tmp/usr/lib/purple-2/telegram-purple.so
-COPY --from=telegram-build /etc/telegram-purple /tmp/etc/telegram-purple
+COPY --from=telegram-build /usr/lib/purple-2/libtelegram-tdlib.so /tmp/usr/lib/purple-2/libtelegram-tdlib.so
+COPY --from=telegram-build /usr/local/share/metainfo/tdlib-purple.metainfo.xml /tmp/usr/local/share/metainfo/tdlib-purple.metainfo.xml
 COPY --from=telegram-build /usr/local/share/locale /tmp/usr/local/share/locale
 COPY --from=telegram-build /tmp/status /tmp/plugin/telegram
 
@@ -409,7 +423,7 @@ RUN addgroup -g 101 -S bitlbee \
  || [ ${ROCKETCHAT} -eq 1 ] || [ ${MATRIX} -eq 1 ] || [ ${SIGNAL} -eq 1 ] \
  || [ ${ICYQUE} -eq 1 ]; then PKGS="${PKGS} json-glib"; fi \
  && if [ ${STEAM} -eq 1 ] || [ ${TELEGRAM} -eq 1 ] || [ ${MATRIX} -eq 1 ]; then PKGS="${PKGS} libgcrypt"; fi \
- && if [ ${TELEGRAM} -eq 1 ]; then PKGS="${PKGS} zlib libwebp libpng"; fi \
+ && if [ ${TELEGRAM} -eq 1 ]; then PKGS="${PKGS} zlib libwebp libpng libstdc++ libgcc"; fi \
  && if [ ${HANGOUTS} -eq 1 ] || [ ${SIGNAL} -eq 1 ]; then PKGS="${PKGS} protobuf-c"; fi \
  && if [ ${SIGNAL} -eq 1 ]; then PKGS="${PKGS} libmagic"; fi \
  && if [ ${SIPE} -eq 1 ]; then PKGS="${PKGS} libxml2"; fi \
