@@ -1,4 +1,6 @@
-FROM alpine:3.15 as base-image
+ARG ALPINE_VERSION
+
+FROM alpine:${ALPINE_VERSION} as base-image
 
 FROM base-image as bitlbee-build
 
@@ -280,12 +282,17 @@ FROM bitlbee-build as matrix-build
 ARG MATRIX=1
 ARG MATRIX_VERSION
 
+SHELL [ "/bin/bash", "-c" ]
+
+COPY matrix-e2e.c.patch /tmp/matrix-e2e.c.patch
+
 RUN echo MATRIX=${MATRIX} > /tmp/status \
  && if [ ${MATRIX} -eq 1 ]; \
      then cd /tmp \
        && git clone -n https://github.com/matrix-org/purple-matrix \
        && cd purple-matrix \
        && git checkout ${MATRIX_VERSION} \
+       && if [ $(uname -m) == "armv7l" ]; then patch < ../matrix-e2e.c.patch; fi \
        && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/purple-2/libmatrix.so; \

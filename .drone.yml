@@ -24,7 +24,7 @@ steps:
     - echo $PASSWORD | docker login --username $USER --password-stdin
     - apk add --update --no-cache bash
     - BUILD_ARGS=$(for BUILD_ARG in $(cat plugin_versions); do echo -n "--build-arg $BUILD_ARG "; done)
-    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:cache --cache-to ezkrg/bitlbee-libpurple:cache -t ezkrg/bitlbee-libpurple:test --platform linux/amd64 $BUILD_ARGS .
+    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:cache --cache-to ezkrg/bitlbee-libpurple:cache --tag ezkrg/bitlbee-libpurple:test --platform linux/amd64 --build-arg ALPINE_VERSION=3.15 $BUILD_ARGS .
     when:
       event:
       - push
@@ -43,7 +43,57 @@ steps:
     - echo $PASSWORD | docker login --username $USER --password-stdin
     - apk add --update --no-cache bash
     - BUILD_ARGS=$(for BUILD_ARG in $(cat plugin_versions); do echo -n "--build-arg $BUILD_ARG "; done)
-    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:cache --cache-to ezkrg/bitlbee-libpurple:cache -t ezkrg/bitlbee-libpurple:$DRONE_TAG -t ezkrg/bitlbee-libpurple:latest --platform linux/amd64 $BUILD_ARGS .
+    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:cache --cache-to ezkrg/bitlbee-libpurple:cache --tag ezkrg/bitlbee-libpurple:$DRONE_TAG --tag ezkrg/bitlbee-libpurple:latest --tag ezkrg/bitlbee-libpurple:alpine --platform linux/amd64 --build-arg ALPINE_VERSION=3.15 $BUILD_ARGS .
+    when:
+      event:
+      - tag
+
+---
+kind: pipeline
+type: docker
+name: alpine3.12
+
+steps:
+  - name: docker
+    image: docker:dind
+    privileged: true
+    detach: true
+    command: [ "dockerd", "--host=tcp://0.0.0.0:2375" ]
+
+  - name: test
+    image: ezkrg/buildx:latest
+    environment:
+      USER:
+        from_secret: DHU
+      PASSWORD:
+        from_secret: DHP
+      DOCKER_HOST: tcp://docker:2375
+    commands:
+    - while ! docker info; do sleep 1; done
+    - docker buildx create --use --name docker --node docker --platform linux/amd64 --driver docker-container $DOCKER_HOST
+    - echo $PASSWORD | docker login --username $USER --password-stdin
+    - apk add --update --no-cache bash
+    - BUILD_ARGS=$(for BUILD_ARG in $(cat plugin_versions); do echo -n "--build-arg $BUILD_ARG "; done)
+    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:alpine3.12-cache --cache-to ezkrg/bitlbee-libpurple:alpine3.12-cache --tag ezkrg/bitlbee-libpurple:alpine3.12-test --platform linux/amd64,linux/arm64,linux/armhf --build-arg ALPINE_VERSION=3.12 $BUILD_ARGS .
+    when:
+      event:
+      - push
+
+  - name: latest
+    image: ezkrg/buildx:latest
+    environment:
+      USER:
+        from_secret: DHU
+      PASSWORD:
+        from_secret: DHP
+      DOCKER_HOST: tcp://docker:2375
+    commands:
+    - while ! docker info; do sleep 1; done
+    - docker buildx create --use --name docker --node docker --platform linux/amd64 --driver docker-container $DOCKER_HOST
+    - echo $PASSWORD | docker login --username $USER --password-stdin
+    - apk add --update --no-cache bash
+    - BUILD_ARGS=$(for BUILD_ARG in $(cat plugin_versions); do echo -n "--build-arg $BUILD_ARG "; done)
+    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:alpine3.12-cache --cache-to ezkrg/bitlbee-libpurple:alpine3.12-cache --tag ezkrg/bitlbee-libpurple:alpine3.12-$DRONE_TAG --tag ezkrg/bitlbee-libpurple:alpine3.12 --platform linux/amd64,linux/arm64,linux/armhf --build-arg ALPINE_VERSION=3.12 $BUILD_ARGS .
     when:
       event:
       - tag
@@ -76,7 +126,7 @@ steps:
     - echo $PASSWORD | docker login --username $USER --password-stdin
     - apk add --update --no-cache bash
     - BUILD_ARGS=$(for BUILD_ARG in $(cat plugin_versions); do echo -n "--build-arg $BUILD_ARG "; done)
-    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:debian-cache --cache-to ezkrg/bitlbee-libpurple:debian-cache -t ezkrg/bitlbee-libpurple:debian-test --platform linux/amd64,linux/arm64,linux/armhf -f Dockerfile.debian $BUILD_ARGS .
+    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:debian-cache --cache-to ezkrg/bitlbee-libpurple:debian-cache --tag ezkrg/bitlbee-libpurple:debian-test --platform linux/amd64,linux/arm64,linux/armhf -f Dockerfile.debian $BUILD_ARGS .
     when:
       event:
       - push
@@ -96,7 +146,7 @@ steps:
     - echo $PASSWORD | docker login --username $USER --password-stdin
     - apk add --update --no-cache bash
     - BUILD_ARGS=$(for BUILD_ARG in $(cat plugin_versions); do echo -n "--build-arg $BUILD_ARG "; done)
-    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:debian-cache --cache-to ezkrg/bitlbee-libpurple:debian-cache -t ezkrg/bitlbee-libpurple:debian-$DRONE_TAG -t ezkrg/bitlbee-libpurple:debian-latest --platform linux/amd64,linux/arm64,linux/armhf -f Dockerfile.debian $BUILD_ARGS .
+    - docker buildx build --push --cache-from ezkrg/bitlbee-libpurple:debian-cache --cache-to ezkrg/bitlbee-libpurple:debian-cache --tag ezkrg/bitlbee-libpurple:debian-$DRONE_TAG --tag ezkrg/bitlbee-libpurple:debian --platform linux/amd64,linux/arm64,linux/armhf -f Dockerfile.debian $BUILD_ARGS .
     when:
       event:
       - tag
@@ -135,6 +185,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 4af294c1da51bd98b31d3c7cec96e571fd054461c406feddfe900be889a3594b
+hmac: 17149ccfc7172082e06fec055ca9d336a8b5be1d1a66904e7bbe62d92d7546a8
 
 ...
