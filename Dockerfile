@@ -8,8 +8,7 @@ ARG BITLBEE_VERSION
 
 RUN apk add --no-cache --update \
     bash shadow build-base git python2 autoconf automake libtool mercurial intltool flex \
-    glib-dev openssl-dev pidgin-dev json-glib-dev libgcrypt-dev zlib-dev libwebp-dev libpng-dev \
-    protobuf-c-dev libxml2-dev discount-dev sqlite-dev http-parser-dev libotr-dev olm-dev \
+    glib-dev openssl-dev pidgin-dev json-glib-dev libgcrypt-dev zlib-dev libotr-dev \
  && cd /tmp \
  && git clone -n https://github.com/bitlbee/bitlbee.git \
  && cd bitlbee \
@@ -112,7 +111,7 @@ ARG TELEGRAM_VERSION
 RUN echo TELEGRAM=${TELEGRAM} > /tmp/status \
  && if [ ${TELEGRAM} -eq 1 ]; \
      then cd /tmp \
-       && apk add --update --no-cache cmake gperf \
+       && apk add --update --no-cache cmake gperf libwebp-dev libpng-dev \
        && git clone -n https://github.com/ars3niy/tdlib-purple.git \
        && cd tdlib-purple \
        && git checkout ${TELEGRAM_VERSION} \
@@ -150,6 +149,7 @@ ARG HANGOUTS_VERSION
 RUN echo HANGOUTS=${HANGOUTS} > /tmp/status \
  && if [ ${HANGOUTS} -eq 1 ]; \
      then cd /tmp \
+       && apk add --update --no-cache protobuf-c-dev \
        && git clone -n https://github.com/EionRobb/purple-hangouts.git \
        && cd purple-hangouts \
        && git checkout ${HANGOUTS_VERSION} \
@@ -193,6 +193,7 @@ ARG SIPE_VERSION
 RUN echo SIPE=${SIPE} > /tmp/status \
  && if [ ${SIPE} -eq 1 ]; \
      then cd /tmp \
+       && apk add --update --no-cache libxml2-dev \
        && git clone -n https://repo.or.cz/siplcs.git \
        && cd siplcs \
        && git checkout ${SIPE_VERSION} \
@@ -241,6 +242,7 @@ ARG ROCKETCHAT_VERSION
 RUN echo ROCKETCHAT=${ROCKETCHAT} > /tmp/status \
  && if [ ${ROCKETCHAT} -eq 1 ]; \
      then cd /tmp \
+       && apk add --update --no-cache discount-dev \
        && git clone -n https://github.com/EionRobb/purple-rocketchat.git \
        && cd purple-rocketchat \
        && git checkout ${ROCKETCHAT_VERSION} \
@@ -289,6 +291,7 @@ COPY matrix-e2e.c.patch /tmp/matrix-e2e.c.patch
 RUN echo MATRIX=${MATRIX} > /tmp/status \
  && if [ ${MATRIX} -eq 1 ]; \
      then cd /tmp \
+       && apk add --update --no-cache sqlite-dev http-parser-dev olm-dev \
        && git clone -n https://github.com/matrix-org/purple-matrix \
        && cd purple-matrix \
        && git checkout ${MATRIX_VERSION} \
