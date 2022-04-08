@@ -181,10 +181,11 @@ trigger:
 
 depends_on:
   - alpine
+  - alpine3.12
   - debian
 
 ---
 kind: signature
-hmac: 17149ccfc7172082e06fec055ca9d336a8b5be1d1a66904e7bbe62d92d7546a8
+hmac: bbb9015868c7b2e451c5f3a0b8473ea3565a5000ffd3c5d4a9914f220628e4c2
 
 ...
