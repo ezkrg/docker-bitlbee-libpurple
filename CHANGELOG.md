@@ -1,5 +1,21 @@
 # Changelog
 
+## 2022-04-08 14:37:31
+- use alpine 3.15
+- remove arm build from alpine3.15 based images
+- update whatsapp to whatsmeow
+- update telegram to tdlib
+- update skypeweb
+- update hangouts
+- update slack
+- update discord
+- update rocket.chat
+- update mastodon
+- update matrix
+- update signal
+- new alpine3.12 tag for arm build
+- other build process related changes
+
 ## 2021-09-14 22:52:43 ([markrawls](https://github.com/markrawls))
 - build for ARM platforms
 
