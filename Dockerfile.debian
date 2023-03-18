@@ -318,13 +318,16 @@ RUN echo SIGNAL=${SIGNAL} > /tmp/status \
  && if [ ${SIGNAL} -eq 1 ]; \
      then cd /tmp \
        && apt-get update \
-       && apt-get install -y --no-install-recommends libmagic-dev \
-       && git clone -n https://github.com/hoehermann/libpurple-signald \
-       && cd libpurple-signald \
+       && apt-get install -y --no-install-recommends libmagic-dev cmake \
+       && git clone -n https://github.com/hoehermann/purple-signald \
+       && cd purple-signald \
        && git checkout ${SIGNAL_VERSION} \
        && git submodule init \
        && git submodule update \
-       && make -j$(nproc --ignore 2) SUPPORT_EXTERNAL_ATTACHMENTS=1 \
+       && mkdir -p build \
+       && cd build \
+       && cmake .. \
+       && make -j$(nproc --ignore 2) \
        && make install \
        && strip /usr/lib/purple-2/libsignald.so; \
      else mkdir -p /usr/lib/purple-2 \
