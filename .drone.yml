@@ -168,7 +168,7 @@ steps:
         from_secret: WH_URL
       template: |
         {
-          "text": "*{{build.author}}*\n*{{repo.owner}}/{{repo.name}}*\n[Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{since build.started}}]({{build.link}}) {{#success build.status}}✅{{else}}❌{{/success}}\n*Branch:* [{{build.branch}}](https://github.com/{{repo.owner}}/{{repo.name}}/commits/{{build.branch}}) *Commit:* [{{build.message}}]({{build.commit}})"
+          "text": "*{{build.author}}*\n*{{repo.owner}}/{{repo.name}}*\n[Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{since build.started}}]({{build.link}}) {{#success build.status}}✅{{else}}❌{{/success}}\n*Branch:* [{{build.branch}}](https://github.com/{{repo.owner}}/{{repo.name}}/commits/{{build.branch}}) *Commit:* [{{build.message}}](https://github.com/{{repo.owner}}/{{repo.name}}/commit/{{build.commit}})"
         }
 
 trigger:
@@ -183,6 +183,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: 593db505f4b5d351cb0aa1adbe910f43aae3a0ad4af3c47239706cfc4cf10617
+hmac: b474ad3dd059e916f18a49d053673fe8760f63c9d8343c0e7051e206524aba86
 
 ...
