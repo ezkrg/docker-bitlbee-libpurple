@@ -160,19 +160,16 @@ clone:
   disable: true
 
 steps:
-  - name: telegram
-    image: appleboy/drone-telegram:1.3.10
+  - name: webhook
+    image: plugins/webhook
     failure: ignore
     settings:
-      token:
-        from_secret: TT
-      to:
-        from_secret: TID
-      message: |
-        *{{commit.author}} ({{commit.email}})*  
-        *{{repo.namespace}}/{{repo.name}}*  
-        [Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{since build.started}}]({{build.link}}) {{#success build.status}}✅{{else}}❌{{/success}}  
-        *Branch:* [{{commit.branch}}](https://github.com/{{repo.namespace}}/{{repo.name}}/commits/{{commit.branch}}) *Commit:* [{{commit.message}}]({{commit.link}})
+      urls:
+        from_secret: WH_URL
+      template: |
+        {
+          "text": "*{{commit.author}} ({{commit.email}})*\n*{{repo.namespace}}/{{repo.name}}*\n[Pipeline #{{build.number}} has {{#success build.status}}passed{{else}}failed{{/success}} in {{since build.started}}]({{build.link}}) {{#success build.status}}✅{{else}}❌{{/success}}  \n*Branch:* [{{commit.branch}}](https://github.com/{{repo.namespace}}/{{repo.name}}/commits/{{commit.branch}}) *Commit:* [{{commit.message}}]({{commit.link}})"
+        }
 
 trigger:
   status:
@@ -186,6 +183,6 @@ depends_on:
 
 ---
 kind: signature
-hmac: bbb9015868c7b2e451c5f3a0b8473ea3565a5000ffd3c5d4a9914f220628e4c2
+hmac: acd73765dc786f31c52be18225c721b1bef1cd59434476928f6870b9d2e11608
 
 ...
